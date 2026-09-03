@@ -3,1409 +3,2638 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎈 可爱气球抽奖</title>
+
+<meta
+  name="viewport"
+  content="width=device-width,
+  initial-scale=1,
+  maximum-scale=1,
+  viewport-fit=cover,
+  user-scalable=no"
+>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ff9fc5">
+
+<title>幸运气球派对</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+
+/* =========================================================
+   基础
+========================================================= */
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
-body {
-    min-height: 100vh;
-    overflow-x: hidden;
-    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background:
-        radial-gradient(circle at 10% 12%, rgba(255,255,255,.9) 0 35px, transparent 36px),
-        radial-gradient(circle at 90% 18%, rgba(255,255,255,.7) 0 45px, transparent 46px),
-        linear-gradient(180deg, #ffd8eb 0%, #fff1f8 50%, #ffe4f0 100%);
-    color: #914f6e;
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
 }
 
-/* 背景装饰 */
-.bg {
-    position: fixed;
-    pointer-events: none;
-    opacity: .45;
-    z-index: 0;
-    animation: bgFloat 5s ease-in-out infinite;
+body{
+  overflow-x:hidden;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+
+  color:#8d3158;
+
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      #fff 0,
+      #fff5fa 13%,
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #ff8fb8 0%,
+      #ffb6d1 24%,
+      #ffd8e8 55%,
+      #fff0f7 78%,
+      #ffc5dc 100%
+    );
+
+  touch-action:manipulation;
 }
 
-.bg1 {
-    left: 4%;
-    top: 15%;
-    font-size: 30px;
+button{
+  font-family:inherit;
+  -webkit-appearance:none;
 }
 
-.bg2 {
-    right: 5%;
-    top: 30%;
-    font-size: 28px;
-    animation-delay: 1s;
+/* 星空闪光背景 */
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.45;
+
+  background-image:
+    radial-gradient(circle,#fff 0 2px,transparent 3px),
+    radial-gradient(circle,#fff8 0 1px,transparent 2px),
+    radial-gradient(circle,#ffd6e7 0 2px,transparent 3px);
+
+  background-size:
+    90px 90px,
+    47px 47px,
+    130px 130px;
+
+  background-position:
+    10px 20px,
+    30px 0,
+    70px 80px;
 }
 
-.bg3 {
-    left: 8%;
-    bottom: 15%;
-    font-size: 25px;
-    animation-delay: 2s;
+/* =========================================================
+   页面主体
+========================================================= */
+
+.app{
+  position:relative;
+  z-index:2;
+
+  width:min(100%,980px);
+  min-height:100vh;
+
+  margin:auto;
+
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    9px
+    calc(25px + env(safe-area-inset-bottom));
 }
 
-.bg4 {
-    right: 10%;
-    bottom: 12%;
-    font-size: 32px;
-    animation-delay: 3s;
+/* =========================================================
+   顶部舞台幕布
+========================================================= */
+
+.curtain{
+  position:absolute;
+  top:0;
+
+  width:34%;
+  height:170px;
+
+  z-index:-1;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #e92f72 0px,
+      #ff5f96 18px,
+      #ff91b5 34px,
+      #ed3b79 51px
+    );
+
+  box-shadow:
+    inset 0 -20px 35px #a9154f44,
+    0 12px 20px #9a2a5833;
+
+  border-radius:
+    0 0 50% 50%;
 }
 
-@keyframes bgFloat {
-    0%,100% {
-        transform: translateY(0) rotate(-5deg);
-    }
-
-    50% {
-        transform: translateY(-15px) rotate(5deg);
-    }
+.curtain.left{
+  left:-11%;
+  transform:skewX(12deg);
 }
 
-.game {
-    width: min(100%, 900px);
-    margin: auto;
-    padding: 25px 18px 40px;
-    position: relative;
-    z-index: 1;
+.curtain.right{
+  right:-11%;
+  transform:skewX(-12deg);
+}
+
+/* =========================================================
+   顶部灯串
+========================================================= */
+
+.lights{
+  position:absolute;
+  top:8px;
+  left:8%;
+  right:8%;
+
+  height:40px;
+
+  display:flex;
+  justify-content:space-between;
+
+  pointer-events:none;
+}
+
+.lights span{
+  width:11px;
+  height:11px;
+
+  border-radius:50%;
+
+  background:#fffbe0;
+
+  box-shadow:
+    0 0 7px #fff,
+    0 0 17px #ffe68b,
+    0 0 27px #fff2a0;
+
+  animation:lightBlink 1.8s infinite alternate;
+}
+
+.lights span:nth-child(2){
+  animation-delay:.2s;
+}
+
+.lights span:nth-child(3){
+  animation-delay:.4s;
+}
+
+.lights span:nth-child(4){
+  animation-delay:.6s;
+}
+
+.lights span:nth-child(5){
+  animation-delay:.8s;
+}
+
+.lights span:nth-child(6){
+  animation-delay:1s;
+}
+
+.lights span:nth-child(7){
+  animation-delay:1.2s;
+}
+
+@keyframes lightBlink{
+  from{
+    opacity:.55;
+    transform:scale(.85);
+  }
+  to{
+    opacity:1;
+    transform:scale(1.18);
+  }
+}
+
+/* =========================================================
+   音效按钮
+========================================================= */
+
+.sound{
+  position:fixed;
+
+  right:11px;
+  top:calc(10px + env(safe-area-inset-top));
+
+  z-index:50;
+
+  width:47px;
+  height:47px;
+
+  border:3px solid white;
+  border-radius:50%;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffbad2,
+      #ff5f99
+    );
+
+  box-shadow:
+    0 7px 18px #9e2e5b38,
+    inset 0 2px 4px #fff8;
+
+  font-size:20px;
+
+  cursor:pointer;
+}
+
+/* =========================================================
+   Hero 标题
+========================================================= */
+
+.hero{
+  position:relative;
+
+  text-align:center;
+
+  padding:
+    25px 50px 7px;
+}
+
+.crown{
+  font-size:35px;
+
+  filter:
+    drop-shadow(0 5px 4px #9e245233);
+
+  animation:crownFloat 2.8s ease-in-out infinite;
+}
+
+@keyframes crownFloat{
+  0%,100%{
+    transform:translateY(0) rotate(-3deg);
+  }
+
+  50%{
+    transform:translateY(-6px) rotate(3deg);
+  }
+}
+
+.badge{
+  display:inline-block;
+
+  margin-top:2px;
+
+  padding:6px 16px;
+
+  border:2px solid white;
+
+  border-radius:999px;
+
+  background:#fff7fb;
+
+  color:#ed4a8b;
+
+  font-size:11px;
+  font-weight:1000;
+
+  letter-spacing:1px;
+
+  box-shadow:
+    0 5px 15px #a82e5b20;
+}
+
+h1{
+  margin:
+    7px 0
+    4px;
+
+  font-size:
+    clamp(37px,10vw,70px);
+
+  line-height:.95;
+
+  font-weight:1000;
+
+  letter-spacing:2px;
+
+  color:#ff4c8d;
+
+  text-shadow:
+    0 3px white,
+    0 6px white,
+    0 9px #ff9abd,
+    0 13px 20px #8f245033;
+
+  animation:titleFloat 3s ease-in-out infinite;
+}
+
+@keyframes titleFloat{
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-3px);
+  }
+}
+
+.hero p{
+  margin:10px 0 0;
+
+  color:#963d63;
+
+  font-size:13px;
+  font-weight:900;
+}
+
+/* =========================================================
+   中央状态区域
+========================================================= */
+
+.stage{
+  position:relative;
+
+  width:min(100%,920px);
+
+  margin:
+    8px auto
+    12px;
+
+  padding:
+    11px;
+
+  border:
+    4px solid white;
+
+  border-radius:31px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff5faee,
+      #ffe1eddc
+    );
+
+  box-shadow:
+    0 18px 38px #8e27592b,
+    inset 0 2px 5px white;
+}
+
+.stage::before{
+  content:"";
+
+  position:absolute;
+
+  inset:6px;
+
+  border:
+    2px dashed #f39abd;
+
+  border-radius:23px;
+
+  opacity:.6;
+
+  pointer-events:none;
+}
+
+/* =========================================================
+   三个数据
+========================================================= */
+
+.stats{
+  position:relative;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1.3fr
+    1fr;
+
+  overflow:hidden;
+
+  border:
+    2px solid #ffd2e3;
+
+  border-radius:22px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fffafa,
+      #ffeef6
+    );
+
+  box-shadow:
+    inset 0 2px 6px white;
+}
+
+.stat{
+  text-align:center;
+
+  padding:
+    8px 5px
+    7px;
+}
+
+.stat + .stat{
+  border-left:
+    2px dashed #f6abc5;
+}
+
+.label{
+  color:#b25b7c;
+
+  font-size:10px;
+
+  font-weight:1000;
+}
+
+.big{
+  margin-top:1px;
+
+  color:#ef3d80;
+
+  font-size:26px;
+
+  font-weight:1000;
+
+  text-shadow:
+    0 2px white;
+}
+
+.diamond{
+  font-size:22px;
+
+  filter:
+    drop-shadow(
+      0 3px 3px #c62c6733
+    );
+}
+
+.orange{
+  color:#ee7046;
+}
+
+/* =========================================================
+   爱心进度
+========================================================= */
+
+.hearts{
+  display:flex;
+
+  justify-content:center;
+
+  gap:1px;
+
+  margin-top:2px;
+}
+
+.heart{
+  font-size:12px;
+
+  color:#ff5595;
+
+  filter:
+    drop-shadow(
+      0 2px 2px #c3296633
+    );
+
+  transition:
+    .25s;
+}
+
+.heart.empty{
+  color:#f3c3d3;
+}
+
+/* =========================================================
+   进度条
+========================================================= */
+
+.progress{
+  position:relative;
+
+  height:9px;
+
+  margin:
+    9px 7px
+    0;
+
+  overflow:hidden;
+
+  border:
+    1px solid white;
+
+  border-radius:999px;
+
+  background:#ffd2e2;
+
+  box-shadow:
+    inset 0 2px 4px #cf719444;
+}
+
+.progress i{
+  display:block;
+
+  width:0;
+  height:100%;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffb6d2,
+      #ff6a9e,
+      #f12f79
+    );
+
+  box-shadow:
+    0 0 8px #ff5a9a;
+
+  transition:
+    width .35s
+    cubic-bezier(.2,1.3,.4,1);
+}
+
+.helper{
+  position:relative;
+
+  margin-top:7px;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:12px;
+
+  font-weight:1000;
+
+  text-shadow:
+    0 1px 3px #9c3461;
+}
+
+/* =========================================================
+   气球区域
+========================================================= */
+
+.balloon-board{
+  position:relative;
+
+  width:min(100%,920px);
+
+  margin:auto;
+
+  padding:
+    16px
+    9px
+    18px;
+
+  border:
+    4px solid white;
+
+  border-radius:32px;
+
+  background:
+
+    radial-gradient(
+      circle at 50% 0,
+      #fff9 0,
+      transparent 80px
+    ),
+
+    linear-gradient(
+      180deg,
+      #ffeef7,
+      #ffd6e8 48%,
+      #ffc7df
+    );
+
+  box-shadow:
+    0 18px 40px #8e285b2e,
+    inset 0 0 0 2px #ff9fc2,
+    inset 0 3px 8px white;
+}
+
+/* 菱格背景 */
+
+.balloon-board::before{
+  content:"";
+
+  position:absolute;
+
+  inset:12px;
+
+  border-radius:25px;
+
+  background:
+    linear-gradient(
+      45deg,
+      transparent 48%,
+      #ffffff33 49%,
+      #ffffff33 51%,
+      transparent 52%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 48%,
+      #ffffff33 49%,
+      #ffffff33 51%,
+      transparent 52%
+    );
+
+  background-size:
+    32px 32px;
+
+  pointer-events:none;
 }
 
 /* 标题 */
 
-.header {
-    text-align: center;
-    margin-bottom: 18px;
+.board-title{
+  position:relative;
+
+  text-align:center;
+
+  margin-bottom:15px;
+
+  color:#a94168;
+
+  font-size:14px;
+
+  font-weight:1000;
 }
 
-.title {
-    font-size: clamp(35px, 7vw, 58px);
-    font-weight: 900;
-    color: #ff6fa8;
-    letter-spacing: 3px;
-    text-shadow:
-        0 4px 0 white,
-        0 7px 15px rgba(255,90,150,.25);
+.board-title span{
+  display:inline-block;
+
+  padding:
+    6px 17px;
+
+  border:
+    2px solid white;
+
+  border-radius:999px;
+
+  background:#fff9;
+
+  box-shadow:
+    0 4px 10px #a5305d1c;
 }
 
-.subtitle {
-    margin-top: 7px;
-    font-size: 16px;
-    color: #b96a88;
+/* =========================================================
+   16个气球
+========================================================= */
+
+.balloons{
+  position:relative;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:
+    14px 4px;
+
+  justify-items:center;
+
+  padding:
+    3px 0 5px;
 }
 
-/* 音效按钮 */
+.balloon{
+  position:relative;
 
-.sound-btn {
-    position: fixed;
-    top: 18px;
-    right: 20px;
-    z-index: 50;
-    border: 2px solid white;
-    background: rgba(255,255,255,.8);
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 22px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(190,70,120,.15);
-    transition: .2s;
+  width:82px;
+  height:108px;
+
+  cursor:pointer;
+
+  filter:
+    drop-shadow(
+      0 9px 8px #9b285b35
+    );
+
+  animation:
+    balloonFloat
+    3.2s
+    ease-in-out
+    infinite;
+
+  transform-origin:
+    50% 78%;
+
+  transition:
+    transform .15s,
+    filter .15s;
 }
 
-.sound-btn:hover {
-    transform: scale(1.08);
+.balloon:nth-child(2){
+  animation-delay:-.35s;
 }
 
-.sound-btn:active {
-    transform: scale(.94);
+.balloon:nth-child(3){
+  animation-delay:-.7s;
 }
 
-/* 状态 */
-
-.status {
-    width: min(100%, 650px);
-    margin: 20px auto;
-    padding: 13px 20px;
-    border-radius: 22px;
-    background: rgba(255,255,255,.78);
-    border: 2px solid rgba(255,255,255,.9);
-    box-shadow: 0 8px 25px rgba(216,101,145,.12);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.balloon:nth-child(4){
+  animation-delay:-1.05s;
 }
 
-.counter {
-    font-size: 17px;
-    font-weight: 800;
+.balloon:nth-child(5){
+  animation-delay:-.5s;
 }
 
-.counter span {
-    color: #ff5799;
-    font-size: 23px;
+.balloon:nth-child(6){
+  animation-delay:-.9s;
 }
 
-.hint {
-    font-size: 14px;
-    color: #c07896;
+.balloon:nth-child(7){
+  animation-delay:-1.4s;
 }
 
-/* 游戏区域 */
-
-.balloon-area {
-    width: min(100%, 780px);
-    margin: auto;
-    padding: 30px 25px 35px;
-    border-radius: 35px;
-
-    background: rgba(255,255,255,.5);
-
-    border: 3px solid rgba(255,255,255,.75);
-
-    box-shadow:
-        0 15px 40px rgba(206,91,139,.12),
-        inset 0 0 30px rgba(255,255,255,.5);
+.balloon:nth-child(8){
+  animation-delay:-1.8s;
 }
 
-/* 气球 */
-
-.balloons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px 20px;
-    justify-items: center;
+.balloon:nth-child(9){
+  animation-delay:-.2s;
 }
 
-.balloon {
-    width: 105px;
-    height: 138px;
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-
-    animation: balloonFloat 3s ease-in-out infinite;
-
-    transition: transform .2s;
+.balloon:nth-child(10){
+  animation-delay:-.65s;
 }
 
-.balloon:nth-child(2n) {
-    animation-delay: -.7s;
+.balloon:nth-child(11){
+  animation-delay:-1s;
 }
 
-.balloon:nth-child(3n) {
-    animation-delay: -1.4s;
+.balloon:nth-child(12){
+  animation-delay:-1.5s;
 }
 
-.balloon:nth-child(4n) {
-    animation-delay: -2s;
+.balloon:nth-child(13){
+  animation-delay:-.4s;
 }
 
-.balloon:hover {
-    transform: translateY(-8px) scale(1.05);
+.balloon:nth-child(14){
+  animation-delay:-.85s;
 }
 
-/* 气球主体 */
-
-.balloon-body {
-    position: absolute;
-
-    width: 88px;
-    height: 112px;
-
-    left: 8px;
-    top: 0;
-
-    border-radius:
-        52% 48% 47% 53%
-        / 42% 42% 58% 58%;
-
-    transform: rotate(-3deg);
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffc2dc 0%,
-            #ff91bd 45%,
-            #ff67a5 100%
-        );
-
-    box-shadow:
-        inset -10px -13px 15px rgba(214,57,116,.16),
-        inset 9px 8px 13px rgba(255,255,255,.55),
-        0 8px 15px rgba(205,80,132,.2);
+.balloon:nth-child(15){
+  animation-delay:-1.25s;
 }
 
-.balloon:nth-child(2n) .balloon-body {
-    background:
-        linear-gradient(
-            135deg,
-            #ffd6e8,
-            #ffa7ca 48%,
-            #ff79b2
-        );
+.balloon:nth-child(16){
+  animation-delay:-1.7s;
 }
 
-.balloon:nth-child(3n) .balloon-body {
-    background:
-        linear-gradient(
-            135deg,
-            #ffc9e0,
-            #ff86b8 48%,
-            #ff62a4
-        );
+@keyframes balloonFloat{
+
+  0%,100%{
+    transform:
+      translateY(0)
+      rotate(-1.5deg);
+  }
+
+  50%{
+    transform:
+      translateY(-6px)
+      rotate(1.5deg);
+  }
 }
 
-/* 高光 */
-
-.balloon-body::before {
-    content: "";
-
-    position: absolute;
-
-    width: 20px;
-    height: 38px;
-
-    left: 17px;
-    top: 15px;
-
-    border-radius: 50%;
-
-    background: rgba(255,255,255,.55);
-
-    transform: rotate(18deg);
+.balloon:active{
+  transform:
+    scale(.9)
+    !important;
 }
 
-/* 爱心 */
+/* =========================================================
+   气球本体
+========================================================= */
 
-.balloon-body::after {
-    content: "♥";
+.balloon-body{
+  position:absolute;
 
-    position: absolute;
+  left:8px;
+  top:5px;
 
-    right: 14px;
-    bottom: 20px;
+  width:66px;
+  height:78px;
 
-    color: rgba(255,255,255,.55);
+  border-radius:
+    50%
+    50%
+    47%
+    47%;
 
-    font-size: 20px;
+  background:
+    radial-gradient(
+      ellipse at 29% 21%,
+      #ffffff 0,
+      #ffffffcc 5%,
+      #ffd7e7 11%,
+      transparent 23%
+    ),
+
+    radial-gradient(
+      ellipse at 70% 75%,
+      #cf2464 0,
+      #ef4382 26%,
+      transparent 50%
+    ),
+
+    linear-gradient(
+      145deg,
+      #fff,
+      #ffbfd7 17%,
+      #ff83b1 43%,
+      #f34887 72%,
+      #c92363 100%
+    );
+
+  box-shadow:
+
+    inset
+    8px 8px 13px
+    #ffffffcc,
+
+    inset
+    -9px -13px 15px
+    #9b174e55,
+
+    inset
+    0 -2px 3px
+    #9f164d44,
+
+    0 6px 7px
+    #8f28563d;
 }
 
-/* 数字 */
+/* 气球边缘柔光 */
 
-.number {
-    position: absolute;
+.balloon-body::before{
+  content:"";
 
-    width: 100%;
+  position:absolute;
 
-    top: 43px;
+  inset:3px;
 
-    text-align: center;
+  border-radius:inherit;
 
-    color: white;
+  border:
+    1px solid #ffffffaa;
 
-    font-size: 25px;
-    font-weight: 900;
-
-    text-shadow:
-        0 2px 4px rgba(184,61,111,.3);
+  pointer-events:none;
 }
 
-/* 气球结 */
+/* 小高光 */
 
-.balloon-knot {
-    position: absolute;
+.balloon-body::after{
+  content:"";
 
-    left: 45px;
-    top: 108px;
+  position:absolute;
 
-    width: 0;
-    height: 0;
+  left:18px;
+  top:15px;
 
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-top: 10px solid #ef619f;
+  width:10px;
+  height:23px;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #ffffff55
+    );
+
+  transform:
+    rotate(17deg);
+
+  opacity:.95;
 }
 
-/* 气球线 */
+/* =========================================================
+   气球结
+========================================================= */
 
-.balloon-string {
-    position: absolute;
+.knot{
+  position:absolute;
 
-    width: 1.5px;
-    height: 28px;
+  left:34px;
+  top:78px;
 
-    left: 51px;
-    top: 117px;
+  width:14px;
+  height:10px;
 
-    background: #d98cac;
+  z-index:5;
 
-    transform: rotate(3deg);
+  background:
+    linear-gradient(
+      145deg,
+      #ff8ab5,
+      #df276c
+    );
+
+  clip-path:
+    polygon(
+      0 0,
+      100% 0,
+      78% 100%,
+      22% 100%
+    );
+
+  filter:
+    drop-shadow(
+      0 2px 2px #8d245033
+    );
 }
 
-@keyframes balloonFloat {
-    0%,100% {
-        transform: translateY(0) rotate(-2deg);
-    }
+/* =========================================================
+   蝴蝶结
+========================================================= */
 
-    50% {
-        transform: translateY(-9px) rotate(2deg);
-    }
+.bow{
+  position:absolute;
+
+  left:27px;
+  top:77px;
+
+  z-index:6;
+
+  width:29px;
+  height:17px;
 }
 
-/* 爆炸 */
+.bow::before,
+.bow::after{
+  content:"";
 
-.balloon.popped {
-    animation: balloonPop .4s forwards;
-    pointer-events: none;
+  position:absolute;
+
+  top:2px;
+
+  width:16px;
+  height:13px;
+
+  border-radius:
+    80%
+    20%
+    70%
+    30%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffb3cd,
+      #f34483 65%,
+      #c51e5e
+    );
+
+  box-shadow:
+    inset 3px 2px 3px #fff7,
+    0 2px 3px #8c245033;
 }
 
-@keyframes balloonPop {
+.bow::before{
+  left:0;
 
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    45% {
-        transform: scale(1.25);
-        opacity: .9;
-    }
-
-    100% {
-        transform: scale(.05);
-        opacity: 0;
-    }
+  transform:
+    rotate(25deg);
 }
 
-/* 星星 */
+.bow::after{
+  right:0;
 
-.spark {
-    position: absolute;
-
-    left: 50%;
-    top: 45%;
-
-    font-size: 23px;
-
-    pointer-events: none;
-
-    animation: sparkMove .7s ease-out forwards;
+  transform:
+    scaleX(-1)
+    rotate(25deg);
 }
 
-@keyframes sparkMove {
+.bow-dot{
+  position:absolute;
 
-    0% {
-        opacity: 1;
-        transform:
-            translate(-50%,-50%)
-            scale(.5);
-    }
+  left:11px;
+  top:5px;
 
-    100% {
-        opacity: 0;
+  width:9px;
+  height:9px;
 
-        transform:
-            translate(
-                calc(-50% + var(--x)),
-                calc(-50% + var(--y))
-            )
-            rotate(180deg)
-            scale(1.2);
-    }
+  border-radius:50%;
+
+  z-index:2;
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      #fff,
+      #ff73a6 45%,
+      #d91f68
+    );
+
+  box-shadow:
+    0 2px 3px #8f245033;
 }
 
-/* 底部 */
+/* =========================================================
+   气球线
+========================================================= */
 
-.bottom-tip {
-    text-align: center;
-    margin-top: 25px;
+.string{
+  position:absolute;
 
-    font-size: 15px;
+  left:40px;
+  top:87px;
 
-    color: #c47796;
+  width:2px;
+  height:20px;
+
+  border-radius:10px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #d78ba7,
+      #a75b7c
+    );
+
+  transform:
+    rotate(2deg);
+
+  opacity:.9;
 }
 
-/* 弹窗 */
+/* =========================================================
+   钻石奖励标记
+========================================================= */
 
-.overlay {
-    position: fixed;
-    inset: 0;
+.reward{
+  position:absolute;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  z-index:20;
 
-    padding: 20px;
+  right:-2px;
+  top:-3px;
 
-    background: rgba(107,45,75,.28);
+  min-width:43px;
 
-    backdrop-filter: blur(7px);
+  padding:
+    4px 7px;
 
-    opacity: 0;
-    visibility: hidden;
+  border:
+    2px solid white;
 
-    transition: .3s;
+  border-radius:999px;
 
-    z-index: 100;
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #ffe8f2
+    );
+
+  color:#ee4084;
+
+  font-size:11px;
+
+  font-weight:1000;
+
+  text-align:center;
+
+  box-shadow:
+    0 4px 8px #a52a5a44;
+
+  opacity:0;
+
+  transform:
+    scale(.5)
+    translateY(10px);
+
+  transition:
+    .25s
+    cubic-bezier(.2,1.4,.4,1);
 }
 
-.overlay.show {
-    opacity: 1;
-    visibility: visible;
+.balloon.revealed .reward{
+  opacity:1;
+
+  transform:
+    scale(1)
+    translateY(0);
 }
 
-.result {
-    width: min(100%, 430px);
+/* =========================================================
+   气球爆开
+========================================================= */
 
-    padding: 38px 25px 30px;
-
-    border-radius: 35px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            180deg,
-            #fff 0%,
-            #fff5fa 100%
-        );
-
-    border: 4px solid white;
-
-    box-shadow:
-        0 25px 70px rgba(129,52,87,.3);
-
-    transform: scale(.7);
-
-    transition:
-        .35s cubic-bezier(.2,1.4,.4,1);
+.balloon.pop{
+  animation:
+    balloonPop
+    .5s
+    forwards
+    !important;
 }
 
-.overlay.show .result {
-    transform: scale(1);
+@keyframes balloonPop{
+
+  0%{
+    transform:scale(1);
+    opacity:1;
+  }
+
+  25%{
+    transform:
+      scale(1.18)
+      rotate(-8deg);
+  }
+
+  55%{
+    transform:
+      scale(.75)
+      rotate(8deg);
+  }
+
+  100%{
+    transform:
+      scale(.05)
+      rotate(25deg);
+
+    opacity:0;
+  }
 }
 
-.result-icon {
-    font-size: 58px;
+/* =========================================================
+   星星爆炸
+========================================================= */
 
-    animation:
-        resultBounce
-        1s ease-in-out infinite;
+.spark{
+  position:absolute;
+
+  left:50%;
+  top:43%;
+
+  z-index:50;
+
+  pointer-events:none;
+
+  font-size:21px;
+
+  animation:
+    sparkFly
+    .8s
+    ease-out
+    forwards;
 }
 
-@keyframes resultBounce {
+@keyframes sparkFly{
 
-    0%,100% {
-        transform: translateY(0);
-    }
+  to{
+    opacity:0;
 
-    50% {
-        transform: translateY(-9px);
-    }
+    transform:
+      translate(
+        var(--x),
+        var(--y)
+      )
+      rotate(240deg)
+      scale(1.35);
+  }
 }
 
-.result h2 {
-    margin-top: 8px;
+/* =========================================================
+   底部提示
+========================================================= */
 
-    font-size: 27px;
+.note{
+  width:min(100%,840px);
 
-    color: #ff659f;
+  margin:
+    13px auto
+    0;
+
+  padding:
+    9px 12px;
+
+  text-align:center;
+
+  border:
+    2px solid white;
+
+  border-radius:18px;
+
+  background:#fff5f9e8;
+
+  color:#a04d71;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  box-shadow:
+    0 5px 13px #9b285a17;
 }
 
-.result-total {
-    margin: 12px 0 24px;
+/* =========================================================
+   开奖按钮
+========================================================= */
 
-    font-size: 38px;
+.gift{
+  display:block;
 
-    font-weight: 900;
+  width:min(100%,420px);
 
-    color: #ff5799;
+  margin:
+    12px auto
+    0;
 
-    text-shadow:
-        0 3px 0 #ffe0ec;
+  border:
+    3px solid white;
+
+  border-radius:22px;
+
+  padding:
+    14px 25px;
+
+  color:white;
+
+  font-size:17px;
+
+  font-weight:1000;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff91ba,
+      #f53c82
+    );
+
+  box-shadow:
+    0 9px 20px #bd286044,
+    inset 0 2px 4px #fff8;
+
+  cursor:pointer;
+
+  transition:
+    transform .15s;
 }
 
-.confirm-btn {
-    width: 100%;
-
-    border: none;
-
-    border-radius: 18px;
-
-    padding: 14px 20px;
-
-    font-size: 18px;
-    font-weight: 900;
-
-    color: white;
-
-    cursor: pointer;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff8fbc,
-            #ff5e9f
-        );
-
-    box-shadow:
-        0 8px 18px rgba(255,92,157,.28);
-
-    transition: .2s;
+.gift:active{
+  transform:scale(.96);
 }
 
-.confirm-btn:hover {
-    transform: translateY(-2px);
+.gift.disabled{
+  opacity:.55;
 }
 
-.confirm-btn:active {
-    transform: scale(.97);
+/* =========================================================
+   页脚
+========================================================= */
+
+.footer{
+  margin-top:11px;
+
+  text-align:center;
+
+  color:#b26080;
+
+  font-size:10px;
+
+  font-weight:800;
 }
 
-/* 彩带 */
+/* =========================================================
+   最终结果
+========================================================= */
 
-.confetti {
-    position: fixed;
+.overlay{
+  position:fixed;
 
-    top: -20px;
+  inset:0;
 
-    z-index: 200;
+  z-index:100;
 
-    pointer-events: none;
+  display:flex;
 
-    animation:
-        confettiFall
-        2.8s linear forwards;
+  align-items:center;
+  justify-content:center;
+
+  padding:18px;
+
+  background:
+    #431629aa;
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:
+    .25s;
 }
 
-@keyframes confettiFall {
-
-    0% {
-        transform:
-            translateY(-20px)
-            rotate(0);
-
-        opacity: 1;
-    }
-
-    100% {
-        transform:
-            translateY(110vh)
-            rotate(720deg);
-
-        opacity: 0;
-    }
+.overlay.show{
+  opacity:1;
+  visibility:visible;
 }
 
-/* 手机 */
+.result{
+  position:relative;
 
-@media(max-width:650px) {
+  width:min(100%,430px);
 
-    .game {
-        padding:
-            18px 10px 30px;
-    }
+  padding:
+    29px 20px
+    23px;
 
-    .title {
-        font-size: 38px;
-    }
+  text-align:center;
 
-    .subtitle {
-        font-size: 14px;
-    }
+  border:
+    4px solid white;
 
-    .status {
-        padding: 10px 13px;
-    }
+  border-radius:34px;
 
-    .hint {
-        display: none;
-    }
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #fff0f7
+    );
 
-    .balloon-area {
-        padding:
-            22px 8px 28px;
+  box-shadow:
+    0 30px 80px #2f102455;
 
-        border-radius: 27px;
-    }
+  transform:
+    scale(.65);
 
-    .balloons {
-        grid-template-columns:
-            repeat(4,1fr);
-
-        gap: 20px 4px;
-    }
-
-    .balloon {
-        width: 75px;
-        height: 105px;
-    }
-
-    .balloon-body {
-        width: 65px;
-        height: 85px;
-        left: 5px;
-    }
-
-    .number {
-        top: 31px;
-        font-size: 20px;
-    }
-
-    .balloon-knot {
-        left: 32px;
-        top: 82px;
-    }
-
-    .balloon-string {
-        left: 38px;
-        top: 91px;
-        height: 20px;
-    }
-
-    .balloon-body::before {
-        width: 15px;
-        height: 29px;
-        left: 12px;
-        top: 11px;
-    }
-
-    .balloon-body::after {
-        right: 9px;
-        bottom: 13px;
-        font-size: 15px;
-    }
-
-    .sound-btn {
-        width: 43px;
-        height: 43px;
-        font-size: 19px;
-        top: 12px;
-        right: 12px;
-    }
+  transition:
+    .45s
+    cubic-bezier(.2,1.35,.4,1);
 }
+
+.overlay.show .result{
+  transform:scale(1);
+}
+
+.result::before{
+  content:"";
+
+  position:absolute;
+
+  inset:8px;
+
+  border:
+    2px dashed #ffacc9;
+
+  border-radius:26px;
+
+  pointer-events:none;
+}
+
+.result .emoji{
+  position:relative;
+
+  font-size:50px;
+
+  animation:
+    resultFloat
+    1.5s
+    ease-in-out
+    infinite;
+}
+
+@keyframes resultFloat{
+
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-7px);
+  }
+}
+
+.result h2{
+  position:relative;
+
+  margin:
+    5px 0;
+
+  color:#f04486;
+
+  font-size:29px;
+
+  font-weight:1000;
+
+  text-shadow:
+    0 2px white;
+}
+
+.result p{
+  position:relative;
+
+  margin:7px 0;
+
+  color:#ae6683;
+
+  font-size:13px;
+
+  font-weight:800;
+}
+
+.totalBox{
+  position:relative;
+
+  margin:
+    15px 0
+    20px;
+
+  padding:
+    15px;
+
+  border:
+    2px dashed #ffabc9;
+
+  border-radius:22px;
+
+  background:#fff0f7;
+
+  color:#a95b78;
+
+  font-weight:900;
+}
+
+.totalBox strong{
+  display:inline-block;
+
+  margin-top:3px;
+
+  color:#f13a82;
+
+  font-size:46px;
+
+  line-height:1;
+
+  text-shadow:
+    0 3px #ffd1e2;
+
+  animation:
+    totalPulse
+    1.1s
+    infinite;
+}
+
+@keyframes totalPulse{
+
+  0%,100%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.08);
+  }
+}
+
+.again{
+  position:relative;
+
+  width:100%;
+
+  border:
+    3px solid white;
+
+  border-radius:20px;
+
+  padding:
+    14px;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff91ba,
+      #f23882
+    );
+
+  box-shadow:
+    0 8px 17px #c8296244;
+
+  font-size:18px;
+
+  font-weight:1000;
+
+  cursor:pointer;
+}
+
+/* =========================================================
+   庆祝飘落
+========================================================= */
+
+.confetti{
+  position:fixed;
+
+  top:-30px;
+
+  z-index:200;
+
+  pointer-events:none;
+
+  animation:
+    fall
+    2.8s
+    linear
+    forwards;
+}
+
+@keyframes fall{
+
+  to{
+    transform:
+      translateY(115vh)
+      rotate(720deg);
+
+    opacity:0;
+  }
+}
+
+/* =========================================================
+   小屏 iPhone
+========================================================= */
+
+@media(max-width:390px){
+
+  .app{
+    padding-left:6px;
+    padding-right:6px;
+  }
+
+  .hero{
+    padding-left:35px;
+    padding-right:35px;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .balloons{
+    gap:
+      10px 0;
+  }
+
+  .balloon{
+    width:74px;
+    height:105px;
+    transform:scale(.94);
+  }
+
+  .balloon-body{
+    left:5px;
+  }
+
+  .reward{
+    right:-5px;
+  }
+}
+
+/* =========================================================
+   超小屏
+========================================================= */
+
+@media(max-width:350px){
+
+  .balloon{
+    transform:scale(.84);
+  }
+
+  .balloons{
+    gap:
+      5px 0;
+  }
+
+  .big{
+    font-size:22px;
+  }
+
+  .heart{
+    font-size:10px;
+  }
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div class="bg bg1">💗</div>
-<div class="bg bg2">💕</div>
-<div class="bg bg3">💖</div>
-<div class="bg bg4">✨</div>
+<div class="app">
 
-<!-- 音效按钮 -->
-<button class="sound-btn" id="soundBtn" title="开启/关闭音效">
+  <!-- 顶部舞台 -->
+
+  <div class="curtain left"></div>
+  <div class="curtain right"></div>
+
+  <div class="lights">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+
+  <!-- 音效 -->
+
+  <button
+    class="sound"
+    id="sound"
+    aria-label="音效"
+  >
     🔊
-</button>
+  </button>
 
-<div class="game">
 
-    <header class="header">
+  <!-- 标题 -->
 
-        <div class="title">
-            🎈 气球抽奖
-        </div>
+  <header class="hero">
 
-        <div class="subtitle">
-            选择你喜欢的气球，看看今天的好运气吧！
-        </div>
-
-    </header>
-
-    <div class="status">
-
-        <div class="counter">
-            已选择
-            <span id="selectedCount">0</span>
-            / 10
-        </div>
-
-        <div class="hint" id="hint">
-            还可以选择 10 个气球
-        </div>
-
+    <div class="crown">
+      👑
     </div>
 
-    <div class="balloon-area">
+    <div class="badge">
+      🎀 TODAY'S LUCKY 🎀
+    </div>
+
+    <h1>
+      幸运气球派对
+    </h1>
+
+    <p>
+      选择 10 个气球，看看今天能获得多少钻石！
+    </p>
+
+  </header>
+
+
+  <!-- 状态栏 -->
+
+  <section class="stage">
+
+    <div class="stats">
+
+      <!-- 当前钻石 -->
+
+      <div class="stat">
+
+        <div class="label">
+          本局钻石
+        </div>
+
+        <div class="big orange">
+          <span class="diamond">💎</span>
+          <span id="total">0</span>
+        </div>
+
+      </div>
+
+
+      <!-- 选择数量 -->
+
+      <div class="stat">
+
+        <div class="label">
+          已选择
+        </div>
+
+        <div class="big">
+          <span id="count">0</span>
+          /
+          10
+        </div>
 
         <div
-            class="balloons"
-            id="balloons">
+          class="hearts"
+          id="hearts"
+        ></div>
+
+      </div>
+
+
+      <!-- 最高 -->
+
+      <div class="stat">
+
+        <div class="label">
+          单颗最高
         </div>
 
-        <div class="bottom-tip">
-            🎀 从 16 个气球中任选 10 个 🎀
+        <div class="big">
+          <span class="diamond">💎</span>
+          100
         </div>
+
+      </div>
 
     </div>
+
+
+    <!-- 进度条 -->
+
+    <div class="progress">
+      <i id="bar"></i>
+    </div>
+
+
+    <div
+      class="helper"
+      id="helper"
+    >
+      从下面 16 个气球中任选 10 个 ✨
+    </div>
+
+  </section>
+
+
+  <!-- 气球区域 -->
+
+  <section class="balloon-board">
+
+    <div class="board-title">
+      <span>
+        🎈 挑选你的幸运气球 🎈
+      </span>
+    </div>
+
+
+    <div
+      class="balloons"
+      id="balloons"
+    ></div>
+
+  </section>
+
+
+  <!-- 提示 -->
+
+  <div class="note">
+    💗 每选一个气球，都有机会获得钻石哦~ 💗
+  </div>
+
+
+  <!-- 开奖按钮 -->
+
+  <button
+    class="gift"
+    id="gift"
+  >
+    🎁 选择 10 个气球开奖
+  </button>
+
+
+  <div class="footer">
+    🎀 幸运气球派对 · 愿你今天好运满满 🎀
+  </div>
 
 </div>
 
 
-<!-- 最终结果 -->
+<!-- =====================================================
+     最终结果弹窗
+===================================================== -->
 
-<div class="overlay" id="overlay">
+<div
+  class="overlay"
+  id="overlay"
+>
 
-    <div class="result">
+  <div class="result">
 
-        <div class="result-icon">
-            🎉
-        </div>
+    <div class="emoji">
+      👑🎉🎈
+    </div>
 
-        <h2>
-            恭喜你！
-        </h2>
+    <h2>
+      恭喜你，幸运星！
+    </h2>
 
-        <div class="result-total">
-            获得
-            <span id="total">0</span>
-            钻石💎
-        </div>
+    <p>
+      10 个气球全部打开啦 · 今天的好运爆棚！
+    </p>
 
-        <button
-            class="confirm-btn"
-            id="againBtn">
+    <div class="totalBox">
 
-            再玩一次 🎈
+      本轮一共获得
 
-        </button>
+      <br>
+
+      <strong id="finalTotal">
+        0
+      </strong>
+
+      💎
 
     </div>
+
+    <button
+      class="again"
+      id="again"
+    >
+      再来一轮 🎈
+    </button>
+
+  </div>
 
 </div>
 
 
 <script>
 
-/* =====================================
-   游戏设置
-===================================== */
+/* =========================================================
+   游戏数据
+========================================================= */
 
-const BALLOON_COUNT = 16;
-
-const MAX_SELECT = 10;
-
-const REWARDS = [
-    1,
-    5,
-    10,
-    20,
-    30,
-    50,
-    70,
-    100
+const rewards = [
+  1,
+  5,
+  10,
+  20,
+  30,
+  50,
+  70,
+  100
 ];
+
+
+/* =========================================================
+   游戏状态
+========================================================= */
 
 let selected = 0;
 
 let total = 0;
 
-let soundEnabled = true;
+let soundOn = true;
+
+let audio;
 
 
-/* =====================================
+/* =========================================================
    DOM
-===================================== */
+========================================================= */
 
-const balloonsContainer =
-    document.getElementById("balloons");
+const balloonsBox =
+  document.getElementById("balloons");
 
-const selectedCount =
-    document.getElementById("selectedCount");
+const countEl =
+  document.getElementById("count");
 
-const hint =
-    document.getElementById("hint");
+const totalEl =
+  document.getElementById("total");
+
+const bar =
+  document.getElementById("bar");
+
+const helper =
+  document.getElementById("helper");
+
+const hearts =
+  document.getElementById("hearts");
 
 const overlay =
-    document.getElementById("overlay");
+  document.getElementById("overlay");
 
-const totalElement =
-    document.getElementById("total");
+const finalTotal =
+  document.getElementById("finalTotal");
 
-const againBtn =
-    document.getElementById("againBtn");
+const gift =
+  document.getElementById("gift");
 
-const soundBtn =
-    document.getElementById("soundBtn");
-
-
-/* =====================================
-   音效系统
-   不需要 MP3 文件
-===================================== */
-
-let audioContext = null;
+const soundButton =
+  document.getElementById("sound");
 
 
-/* 创建音频 */
+/* =========================================================
+   Safari 音频
+========================================================= */
 
-function getAudioContext() {
+function audioCtx(){
 
-    if (!audioContext) {
+  const Audio =
+    window.AudioContext ||
+    window.webkitAudioContext;
 
-        const AudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
+  if(!Audio){
+    return null;
+  }
 
-        if (!AudioContext) {
-            return null;
-        }
+  if(!audio){
+    audio = new Audio();
+  }
 
-        audioContext =
-            new AudioContext();
-    }
+  if(audio.state === "suspended"){
+    audio.resume();
+  }
 
-    if (audioContext.state === "suspended") {
-        audioContext.resume();
-    }
-
-    return audioContext;
+  return audio;
 }
 
 
-/* 播放音符 */
+/* =========================================================
+   音效
+========================================================= */
 
-function playTone(
-    frequency,
-    duration = 0.12,
-    type = "sine",
-    volume = 0.08
-) {
+function tone(
+  frequency,
+  duration = .1,
+  volume = .055
+){
 
-    if (!soundEnabled) return;
+  if(!soundOn){
+    return;
+  }
 
-    const ctx = getAudioContext();
+  const ctx =
+    audioCtx();
 
-    if (!ctx) return;
+  if(!ctx){
+    return;
+  }
 
-    const oscillator =
-        ctx.createOscillator();
+  const oscillator =
+    ctx.createOscillator();
 
-    const gain =
-        ctx.createGain();
+  const gain =
+    ctx.createGain();
 
-    oscillator.type = type;
+  oscillator.type =
+    "sine";
 
-    oscillator.frequency.setValueAtTime(
-        frequency,
-        ctx.currentTime
-    );
+  oscillator.frequency.value =
+    frequency;
 
-    gain.gain.setValueAtTime(
-        volume,
-        ctx.currentTime
-    );
+  gain.gain.setValueAtTime(
+    volume,
+    ctx.currentTime
+  );
 
-    gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        ctx.currentTime + duration
-    );
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    ctx.currentTime + duration
+  );
 
-    oscillator.connect(gain);
+  oscillator.connect(gain);
 
-    gain.connect(ctx.destination);
+  gain.connect(ctx.destination);
 
-    oscillator.start();
+  oscillator.start();
 
-    oscillator.stop(
-        ctx.currentTime + duration
-    );
+  oscillator.stop(
+    ctx.currentTime + duration
+  );
 }
 
 
-/* 点击气球音 */
+function clickSound(){
 
-function balloonSound() {
+  tone(520,.08);
 
-    playTone(
-        520,
-        0.08,
-        "sine",
-        0.09
-    );
-
-    setTimeout(() => {
-
-        playTone(
-            760,
-            0.1,
-            "sine",
-            0.07
-        );
-
-    }, 55);
+  setTimeout(
+    () => tone(760,.1),
+    55
+  );
 }
 
 
-/* 奖励音 */
+function rewardSound(){
 
-function rewardSound() {
+  tone(880,.1);
 
-    playTone(
-        880,
-        0.12,
-        "sine",
-        0.07
-    );
+  setTimeout(
+    () => tone(1100,.15),
+    75
+  );
 
-    setTimeout(() => {
-
-        playTone(
-            1175,
-            0.18,
-            "sine",
-            0.08
-        );
-
-    }, 90);
 }
 
 
-/* 最终胜利音 */
+function winSound(){
 
-function winSound() {
+  const notes = [
+    523,
+    659,
+    784,
+    988,
+    1175,
+    1396
+  ];
 
-    const notes = [
-        523,
-        659,
-        784,
-        1046
-    ];
+  notes.forEach(
+    (frequency,index)=>{
 
-    notes.forEach(
-        (note,index) => {
-
-            setTimeout(() => {
-
-                playTone(
-                    note,
-                    0.25,
-                    "sine",
-                    0.09
-                );
-
-            }, index * 130);
-
-        }
-    );
-}
-
-
-/* =====================================
-   音效开关
-===================================== */
-
-soundBtn.addEventListener(
-    "click",
-    () => {
-
-        soundEnabled =
-            !soundEnabled;
-
-        soundBtn.textContent =
-            soundEnabled
-                ? "🔊"
-                : "🔇";
-
-        if (soundEnabled) {
-
-            playTone(
-                880,
-                0.12,
-                "sine",
-                0.07
-            );
-
-        }
+      setTimeout(
+        () => tone(
+          frequency,
+          .22,
+          .065
+        ),
+        index * 105
+      );
 
     }
-);
+  );
+
+}
 
 
-/* =====================================
+/* =========================================================
+   震动
+========================================================= */
+
+function vibrate(
+  duration = 18
+){
+
+  if(
+    navigator.vibrate
+  ){
+
+    navigator.vibrate(
+      duration
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   更新 UI
+========================================================= */
+
+function update(){
+
+  countEl.textContent =
+    selected;
+
+  totalEl.textContent =
+    total;
+
+  bar.style.width =
+    (selected / 10 * 100) + "%";
+
+
+  if(selected < 10){
+
+    helper.textContent =
+      `还可以选择 ${10 - selected} 个气球 ✨`;
+
+  }else{
+
+    helper.textContent =
+      "10 个气球已选满，马上开奖！";
+
+  }
+
+
+  hearts.innerHTML = "";
+
+
+  for(
+    let i = 0;
+    i < 10;
+    i++
+  ){
+
+    const heart =
+      document.createElement("span");
+
+    heart.className =
+      "heart";
+
+
+    if(i < selected){
+
+      heart.textContent =
+        "♥";
+
+    }else{
+
+      heart.textContent =
+        "♡";
+
+      heart.classList.add(
+        "empty"
+      );
+
+    }
+
+    hearts.appendChild(
+      heart
+    );
+
+  }
+
+
+  if(selected === 10){
+
+    gift.classList.remove(
+      "disabled"
+    );
+
+  }else{
+
+    gift.classList.add(
+      "disabled"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
    创建气球
-===================================== */
+========================================================= */
 
-function createBalloons() {
+function createBalloon(){
 
-    balloonsContainer.innerHTML = "";
+  const balloon =
+    document.createElement("div");
 
-    selected = 0;
+  balloon.className =
+    "balloon";
 
-    total = 0;
 
-    updateCounter();
+  balloon.innerHTML = `
 
-    for (
-        let i = 1;
-        i <= BALLOON_COUNT;
-        i++
-    ) {
+    <div class="balloon-body"></div>
 
-        const balloon =
-            document.createElement("div");
+    <div class="knot"></div>
 
-        balloon.className =
-            "balloon";
+    <div class="bow">
 
-        balloon.innerHTML = `
-            <div class="balloon-body"></div>
-            <div class="number">${i}</div>
-            <div class="balloon-knot"></div>
-            <div class="balloon-string"></div>
-        `;
+      <div class="bow-dot"></div>
 
-        balloon.addEventListener(
-            "click",
-            () => {
+    </div>
 
-                if (
-                    balloon.classList.contains(
-                        "popped"
-                    )
-                ) {
-                    return;
-                }
+    <div class="string"></div>
 
-                if (
-                    selected >= MAX_SELECT
-                ) {
-                    return;
-                }
+    <div class="reward">
+      💎?
+    </div>
 
-                popBalloon(balloon);
+  `;
 
-            }
-        );
 
-        balloonsContainer.appendChild(
-            balloon
-        );
-    }
-}
-
-
-/* =====================================
-   爆破气球
-===================================== */
-
-function popBalloon(balloon) {
-
-    selected++;
-
-    /* 随机奖励 */
-
-    const reward =
-        REWARDS[
-            Math.floor(
-                Math.random() *
-                REWARDS.length
-            )
-        ];
-
-    total += reward;
-
-    /* 音效 */
-
-    balloonSound();
-
-    setTimeout(() => {
-        rewardSound();
-    }, 80);
-
-    /* 爆炸效果 */
-
-    createSparks(balloon);
-
-    balloon.classList.add("popped");
-
-    updateCounter();
-
-    /* 第10次 */
-
-    if (
-        selected >= MAX_SELECT
-    ) {
-
-        disableRemaining();
-
-        setTimeout(
-            () => {
-
-                showResult();
-
-            },
-            650
-        );
-    }
-}
-
-
-/* =====================================
-   更新次数
-===================================== */
-
-function updateCounter() {
-
-    selectedCount.textContent =
-        selected;
-
-    const remaining =
-        MAX_SELECT - selected;
-
-    if (remaining > 0) {
-
-        hint.textContent =
-            `还可以选择 ${remaining} 个气球`;
-
-    } else {
-
-        hint.textContent =
-            "本轮抽奖完成啦！";
-    }
-}
-
-
-/* =====================================
-   禁止剩余气球
-===================================== */
-
-function disableRemaining() {
-
-    const balloons =
-        document.querySelectorAll(
-            ".balloon"
-        );
-
-    balloons.forEach(
-        balloon => {
-
-            if (
-                !balloon.classList.contains(
-                    "popped"
-                )
-            ) {
-
-                balloon.classList.add(
-                    "disabled"
-                );
-
-                balloon.style.opacity =
-                    ".45";
-
-            }
-
-        }
-    );
-}
-
-
-/* =====================================
-   爆炸粒子
-===================================== */
-
-function createSparks(balloon) {
-
-    const symbols = [
-        "✨",
-        "💗",
-        "💕",
-        "⭐",
-        "💎"
-    ];
-
-    for (
-        let i = 0;
-        i < 9;
-        i++
-    ) {
-
-        const spark =
-            document.createElement(
-                "div"
-            );
-
-        spark.className =
-            "spark";
-
-        spark.textContent =
-            symbols[
-                Math.floor(
-                    Math.random() *
-                    symbols.length
-                )
-            ];
-
-        const x =
-            (
-                Math.random() *
-                170 -
-                85
-            ) + "px";
-
-        const y =
-            (
-                Math.random() *
-                170 -
-                85
-            ) + "px";
-
-        spark.style.setProperty(
-            "--x",
-            x
-        );
-
-        spark.style.setProperty(
-            "--y",
-            y
-        );
-
-        balloon.appendChild(
-            spark
-        );
-
-        setTimeout(
-            () => {
-                spark.remove();
-            },
-            800
-        );
-    }
-}
-
-
-/* =====================================
-   显示最终结果
-===================================== */
-
-function showResult() {
-
-    totalElement.textContent =
-        total;
-
-    overlay.classList.add(
-        "show"
-    );
-
-    winSound();
-
-    createConfetti();
-}
-
-
-/* =====================================
-   彩带
-===================================== */
-
-function createConfetti() {
-
-    const items = [
-        "💗",
-        "💕",
-        "✨",
-        "🎀",
-        "💎",
-        "⭐"
-    ];
-
-    for (
-        let i = 0;
-        i < 40;
-        i++
-    ) {
-
-        const confetti =
-            document.createElement(
-                "div"
-            );
-
-        confetti.className =
-            "confetti";
-
-        confetti.textContent =
-            items[
-                Math.floor(
-                    Math.random() *
-                    items.length
-                )
-            ];
-
-        confetti.style.left =
-            Math.random() *
-            100 +
-            "vw";
-
-        confetti.style.fontSize =
-            (
-                14 +
-                Math.random() * 18
-            ) +
-            "px";
-
-        confetti.style.animationDuration =
-            (
-                2 +
-                Math.random() * 1.8
-            ) +
-            "s";
-
-        document.body.appendChild(
-            confetti
-        );
-
-        setTimeout(
-            () => {
-                confetti.remove();
-            },
-            4500
-        );
-    }
-}
-
-
-/* =====================================
-   再玩一次
-===================================== */
-
-againBtn.addEventListener(
+  balloon.addEventListener(
     "click",
+    () => pickBalloon(balloon)
+  );
+
+
+  return balloon;
+
+}
+
+
+/* =========================================================
+   初始化16个气球
+========================================================= */
+
+function makeBalloons(){
+
+  balloonsBox.innerHTML = "";
+
+  for(
+    let i = 0;
+    i < 16;
+    i++
+  ){
+
+    balloonsBox.appendChild(
+      createBalloon()
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   选择气球
+========================================================= */
+
+function pickBalloon(
+  balloon
+){
+
+  if(
+    selected >= 10
+  ){
+    return;
+  }
+
+  if(
+    balloon.classList.contains(
+      "pop"
+    )
+  ){
+    return;
+  }
+
+
+  audioCtx();
+
+  vibrate();
+
+
+  selected++;
+
+
+  const reward =
+    rewards[
+      Math.floor(
+        Math.random()
+        * rewards.length
+      )
+    ];
+
+
+  total += reward;
+
+
+  /* 显示钻石 */
+
+  balloon.querySelector(
+    ".reward"
+  ).textContent =
+    "💎 " + reward;
+
+
+  balloon.classList.add(
+    "revealed"
+  );
+
+
+  /* 爆炸效果 */
+
+  setTimeout(
     () => {
 
-        overlay.classList.remove(
-            "show"
+      balloon.classList.add(
+        "pop"
+      );
+
+    },
+    260
+  );
+
+
+  clickSound();
+
+
+  setTimeout(
+    rewardSound,
+    80
+  );
+
+
+  createSparks(
+    balloon
+  );
+
+
+  update();
+
+
+  /* =====================================================
+     选满10个
+  ===================================================== */
+
+  if(
+    selected === 10
+  ){
+
+    document
+      .querySelectorAll(
+        ".balloon"
+      )
+      .forEach(
+        b => {
+
+          if(
+            !b.classList.contains(
+              "pop"
+            )
+          ){
+
+            b.style.pointerEvents =
+              "none";
+
+          }
+
+        }
+      );
+
+
+    setTimeout(
+      showResult,
+      800
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   星星粒子
+========================================================= */
+
+function createSparks(
+  balloon
+){
+
+  const symbols = [
+    "✨",
+    "💗",
+    "💕",
+    "⭐",
+    "💎",
+    "🎀"
+  ];
+
+
+  symbols.forEach(
+    (symbol,index)=>{
+
+      const spark =
+        document.createElement(
+          "span"
         );
 
-        setTimeout(
-            () => {
 
-                createBalloons();
+      spark.className =
+        "spark";
 
-            },
-            250
-        );
+
+      spark.textContent =
+        symbol;
+
+
+      spark.style.setProperty(
+        "--x",
+        (
+          Math.random() * 160
+          - 80
+        ) + "px"
+      );
+
+
+      spark.style.setProperty(
+        "--y",
+        (
+          Math.random() * 160
+          - 80
+        ) + "px"
+      );
+
+
+      balloon.appendChild(
+        spark
+      );
+
+
+      setTimeout(
+        () => spark.remove(),
+        850
+      );
 
     }
-);
+  );
+
+}
 
 
-/* =====================================
+/* =========================================================
+   最终结果
+========================================================= */
+
+function showResult(){
+
+  finalTotal.textContent =
+    total;
+
+  overlay.classList.add(
+    "show"
+  );
+
+  winSound();
+
+  vibrate(45);
+
+  createConfetti();
+
+}
+
+
+/* =========================================================
+   庆祝
+========================================================= */
+
+function createConfetti(){
+
+  const symbols = [
+    "💗",
+    "💕",
+    "✨",
+    "🎀",
+    "💎",
+    "⭐",
+    "🎈",
+    "🌸"
+  ];
+
+
+  for(
+    let i = 0;
+    i < 60;
+    i++
+  ){
+
+    const confetti =
+      document.createElement(
+        "span"
+      );
+
+
+    confetti.className =
+      "confetti";
+
+
+    confetti.textContent =
+      symbols[
+        Math.floor(
+          Math.random()
+          * symbols.length
+        )
+      ];
+
+
+    confetti.style.left =
+      Math.random() * 100
+      + "vw";
+
+
+    confetti.style.fontSize =
+      (
+        14 +
+        Math.random() * 18
+      ) + "px";
+
+
+    confetti.style.animationDuration =
+      (
+        2 +
+        Math.random() * 2
+      ) + "s";
+
+
+    document.body.appendChild(
+      confetti
+    );
+
+
+    setTimeout(
+      () => confetti.remove(),
+      4500
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   音效开关
+========================================================= */
+
+soundButton.onclick =
+function(){
+
+  soundOn =
+    !soundOn;
+
+
+  soundButton.textContent =
+    soundOn
+      ? "🔊"
+      : "🔇";
+
+
+  if(soundOn){
+
+    tone(
+      880,
+      .12
+    );
+
+  }
+
+};
+
+
+/* =========================================================
+   开奖按钮
+========================================================= */
+
+gift.onclick =
+function(){
+
+  if(
+    selected === 10
+  ){
+
+    showResult();
+
+  }
+
+};
+
+
+/* =========================================================
+   再来一轮
+========================================================= */
+
+document
+  .getElementById("again")
+  .onclick =
+function(){
+
+  overlay.classList.remove(
+    "show"
+  );
+
+
+  setTimeout(
+    () => {
+
+      selected = 0;
+
+      total = 0;
+
+      makeBalloons();
+
+      update();
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    },
+    220
+  );
+
+};
+
+
+/* =========================================================
    启动
-===================================== */
+========================================================= */
 
-createBalloons();
+makeBalloons();
+
+update();
 
 </script>
 
 </body>
 </html>
-```
-

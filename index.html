@@ -3,14 +3,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1,
-      maximum-scale=1,
-      viewport-fit=cover,
-      user-scalable=no">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ff9fc5">
@@ -18,11 +11,6 @@
 <title>幸运气球派对</title>
 
 <style>
-
-/* =========================
-   基础
-========================= */
-
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -31,7 +19,6 @@
 html,body{
     margin:0;
     padding:0;
-    width:100%;
     min-height:100%;
 }
 
@@ -44,23 +31,25 @@ body{
         Arial,
         sans-serif;
 
+    overflow-x:hidden;
+
     background:
-        radial-gradient(circle at 50% 5%, #fff 0%, #ffe9f2 22%, transparent 48%),
+        radial-gradient(
+            circle at 50% 5%,
+            #ffffff 0%,
+            #ffe8f2 20%,
+            transparent 46%
+        ),
         linear-gradient(
             180deg,
-            #ffb5d1 0%,
-            #ff9fc5 32%,
+            #ffb5d2 0%,
+            #ff9fc5 35%,
             #ffb9d5 70%,
-            #ffd7e7 100%
+            #ffd9e9 100%
         );
 
     color:#8d4265;
-    overflow-x:hidden;
-    min-height:100vh;
-    min-height:100dvh;
 }
-
-/* 背景闪光 */
 
 body::before{
     content:"";
@@ -69,46 +58,33 @@ body::before{
     pointer-events:none;
 
     background-image:
-        radial-gradient(circle at 12% 15%, rgba(255,255,255,.9) 0 2px, transparent 3px),
-        radial-gradient(circle at 85% 12%, rgba(255,255,255,.8) 0 2px, transparent 3px),
-        radial-gradient(circle at 18% 55%, rgba(255,255,255,.75) 0 2px, transparent 3px),
-        radial-gradient(circle at 90% 64%, rgba(255,255,255,.7) 0 2px, transparent 3px),
-        radial-gradient(circle at 50% 88%, rgba(255,255,255,.7) 0 2px, transparent 3px);
+        radial-gradient(circle at 12% 15%,#fff 0 2px,transparent 3px),
+        radial-gradient(circle at 85% 12%,#fff 0 2px,transparent 3px),
+        radial-gradient(circle at 18% 55%,#fff 0 2px,transparent 3px),
+        radial-gradient(circle at 90% 64%,#fff 0 2px,transparent 3px);
 
-    opacity:.9;
+    opacity:.8;
 }
-
-
-/* =========================
-   主容器
-========================= */
 
 .app{
     width:100%;
     max-width:980px;
-    margin:0 auto;
-
     min-height:100vh;
-    min-height:100dvh;
+    margin:auto;
 
     padding:
-        max(20px, env(safe-area-inset-top))
-        14px
-        max(28px, env(safe-area-inset-bottom));
+        max(18px,env(safe-area-inset-top))
+        12px
+        max(30px,env(safe-area-inset-bottom));
 
     position:relative;
 }
-
-
-/* =========================
-   两侧幕布
-========================= */
 
 .curtain{
     position:fixed;
     top:0;
     bottom:0;
-    width:90px;
+    width:78px;
 
     pointer-events:none;
     z-index:0;
@@ -116,42 +92,34 @@ body::before{
     background:
         linear-gradient(
             90deg,
-            #d83c79 0%,
-            #f56e9e 20%,
-            #ff9fc4 48%,
-            #ef5c94 72%,
-            #c9316c 100%
+            #cf3272,
+            #f66d9e 25%,
+            #ffa3c7 50%,
+            #ed5a94 75%,
+            #c92d69
         );
 
-    opacity:.72;
-
-    box-shadow:
-        inset -8px 0 15px rgba(150,25,75,.18);
+    opacity:.65;
 }
 
 .curtain.left{
     left:0;
-    border-radius:0 0 40px 0;
+    border-radius:0 0 35px 0;
 }
 
 .curtain.right{
     right:0;
     transform:scaleX(-1);
-    border-radius:0 0 40px 0;
+    border-radius:0 0 35px 0;
 }
-
-
-/* =========================
-   顶部灯光
-========================= */
 
 .lights{
     position:absolute;
-    top:10px;
+    top:8px;
     left:50%;
     transform:translateX(-50%);
 
-    width:min(680px,82vw);
+    width:min(650px,80vw);
 
     display:flex;
     justify-content:space-between;
@@ -168,9 +136,10 @@ body::before{
 
     box-shadow:
         0 0 8px #fff,
-        0 0 15px rgba(255,255,255,.9);
+        0 0 16px #fff;
 
-    animation:blink 1.5s infinite alternate;
+    animation:
+        blink 1.5s infinite alternate;
 }
 
 .lights span:nth-child(2){animation-delay:.15s}
@@ -182,46 +151,34 @@ body::before{
 .lights span:nth-child(8){animation-delay:1.05s}
 
 @keyframes blink{
-    from{opacity:.45;transform:scale(.8)}
-    to{opacity:1;transform:scale(1.25)}
+    from{opacity:.4}
+    to{
+        opacity:1;
+        transform:scale(1.25);
+    }
 }
-
-
-/* =========================
-   音效按钮
-========================= */
 
 .sound{
     position:absolute;
-    top:48px;
-    right:20px;
 
-    width:45px;
-    height:45px;
+    right:17px;
+    top:42px;
 
-    border:2px solid rgba(255,255,255,.85);
+    width:43px;
+    height:43px;
+
+    border:2px solid #fff;
     border-radius:50%;
 
-    background:rgba(255,255,255,.55);
+    background:#ffffff99;
 
     box-shadow:
-        0 5px 15px rgba(150,45,90,.15),
-        inset 0 1px 0 white;
+        0 5px 15px #96345a26;
 
-    font-size:20px;
+    font-size:19px;
 
-    cursor:pointer;
     z-index:20;
 }
-
-.sound:active{
-    transform:scale(.9);
-}
-
-
-/* =========================
-   Hero
-========================= */
 
 .hero{
     position:relative;
@@ -229,59 +186,56 @@ body::before{
 
     text-align:center;
 
-    padding-top:32px;
+    padding-top:28px;
 }
 
 .crown{
-    font-size:38px;
-
-    filter:
-        drop-shadow(0 4px 3px rgba(150,60,90,.2));
+    font-size:36px;
 
     animation:
-        crownFloat 2.2s ease-in-out infinite;
+        float 2.2s ease-in-out infinite;
 }
 
-@keyframes crownFloat{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-6px)}
+@keyframes float{
+    50%{
+        transform:translateY(-5px);
+    }
 }
 
 .badge{
     display:inline-block;
 
-    margin-top:3px;
-    padding:7px 18px;
+    margin-top:2px;
+
+    padding:6px 17px;
 
     border-radius:30px;
 
     color:white;
 
-    font-size:11px;
+    font-size:10px;
     font-weight:900;
     letter-spacing:2px;
 
     background:
         linear-gradient(
-            180deg,
-            #ffb5d4,
-            #ed6e9e
+            #ffb6d5,
+            #ed6b9d
         );
 
-    border:2px solid rgba(255,255,255,.75);
+    border:2px solid #ffffffbb;
 
     box-shadow:
-        0 5px 15px rgba(150,40,85,.16),
-        inset 0 1px 0 rgba(255,255,255,.9);
+        0 5px 15px #96345a20;
 }
 
 h1{
-    margin:9px 0 4px;
+    margin:8px 0 4px;
 
     font-size:
-        clamp(30px, 8vw, 52px);
+        clamp(29px,8vw,50px);
 
-    line-height:1.05;
+    line-height:1;
 
     font-weight:1000;
 
@@ -290,115 +244,101 @@ h1{
     color:#fff;
 
     text-shadow:
-        0 3px 0 #ed709f,
-        0 6px 12px rgba(142,45,86,.24);
+        0 3px #e76b9a,
+        0 6px 12px #8e2d561f;
 }
 
 .hero p{
-    margin:8px 0 0;
+    margin:8px 0;
 
     color:#fff;
 
-    font-size:
-        clamp(13px,3.5vw,16px);
-
+    font-size:13px;
     font-weight:700;
 
     text-shadow:
-        0 2px 4px rgba(130,50,80,.18);
+        0 2px 4px #7a284018;
 }
-
-
-/* =========================
-   数据面板
-========================= */
 
 .stage{
     position:relative;
     z-index:3;
 
-    margin:18px auto 13px;
-
     width:min(760px,100%);
 
-    padding:12px;
+    margin:17px auto 12px;
 
-    border-radius:25px;
+    padding:11px;
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.82),
-            rgba(255,239,247,.82)
-        );
+    border-radius:24px;
 
-    border:2px solid rgba(255,255,255,.85);
+    background:#ffffffd9;
+
+    border:2px solid #ffffffd9;
 
     box-shadow:
-        0 12px 30px rgba(150,50,90,.15),
-        inset 0 1px 0 white;
+        0 12px 30px #96325a20;
 }
 
 .stats{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:7px;
 }
 
 .stat{
-    min-height:48px;
+    min-height:46px;
 
     display:flex;
     align-items:center;
     justify-content:center;
+
     text-align:center;
 
-    padding:5px;
+    padding:4px;
 
-    border-radius:15px;
+    border-radius:14px;
 
     background:
         linear-gradient(
-            180deg,
             #fff,
             #fff0f7
         );
 
     color:#a84d74;
 
-    font-size:12px;
+    font-size:11px;
     font-weight:800;
-
-    box-shadow:
-        inset 0 1px 0 white;
 }
 
-.stat span{
+.stat b{
     margin-left:3px;
+
     font-size:17px;
-    color:#e95d91;
-    font-weight:1000;
+
+    color:#e64f87;
 }
 
 .progress{
-    height:9px;
+    height:8px;
 
-    margin:10px 3px 7px;
+    margin:9px 3px 6px;
 
     border-radius:20px;
 
     background:#ffd8e8;
 
     overflow:hidden;
-
-    box-shadow:
-        inset 0 2px 4px rgba(160,50,90,.1);
 }
 
 .progress i{
     display:block;
 
-    width:0%;
+    width:0;
+
     height:100%;
 
     border-radius:20px;
@@ -411,10 +351,7 @@ h1{
             #ef6b9b
         );
 
-    box-shadow:
-        0 0 8px rgba(240,90,145,.5);
-
-    transition:width .4s ease;
+    transition:.4s;
 }
 
 .helper{
@@ -427,9 +364,9 @@ h1{
 }
 
 
-/* =========================
+/* ==========================
    气球区域
-========================= */
+========================== */
 
 .balloon-board{
     position:relative;
@@ -437,185 +374,146 @@ h1{
 
     width:min(760px,100%);
 
-    margin:0 auto;
+    margin:auto;
 
     padding:
-        15px
-        clamp(8px,2vw,20px)
-        19px;
+        13px
+        8px
+        17px;
 
-    border-radius:32px;
+    border-radius:30px;
 
     background:
         radial-gradient(
             circle at 50% 20%,
-            rgba(255,255,255,.75),
-            rgba(255,240,247,.85) 55%,
-            rgba(255,220,235,.92)
+            #ffffffc9,
+            #fff0f7db 55%,
+            #ffdcead9
         );
 
-    border:3px solid rgba(255,255,255,.8);
+    border:3px solid #ffffffcc;
 
     box-shadow:
-        0 16px 35px rgba(150,45,90,.18),
-        inset 0 1px 0 white;
+        0 16px 35px #96325a2b;
 }
 
 .board-title{
     text-align:center;
 
-    margin-bottom:8px;
+    margin-bottom:5px;
 }
 
 .board-title span{
     display:inline-block;
 
-    padding:6px 15px;
+    padding:6px 14px;
 
     border-radius:20px;
 
-    background:rgba(255,255,255,.7);
+    background:#ffffffb8;
 
     color:#d55789;
 
     font-size:13px;
     font-weight:900;
-
-    box-shadow:
-        0 4px 10px rgba(170,60,100,.08);
 }
-
-
-/* =========================
-   16个气球
-========================= */
 
 .balloons{
     display:grid;
 
     grid-template-columns:
-        repeat(4, minmax(0,1fr));
+        repeat(4,minmax(0,1fr));
 
     gap:
-        clamp(7px,2.2vw,18px)
-        clamp(5px,2vw,15px);
+        clamp(5px,1.8vw,15px)
+        clamp(2px,1.5vw,12px);
 
-    padding:
-        6px
-        clamp(2px,1vw,8px)
-        4px;
+    padding:5px 0;
 }
 
 
-/* 气球外层 */
+/* ==========================
+   大号饱满气球
+========================== */
 
 .balloon{
     position:relative;
 
     height:
-        clamp(126px, 18vw, 175px);
+        clamp(128px,20vw,180px);
 
     display:flex;
     justify-content:center;
-    align-items:flex-start;
 
     cursor:pointer;
 
     user-select:none;
-
-    perspective:500px;
-
-    transition:
-        transform .18s ease,
-        filter .18s ease;
 }
-
-.balloon:not(.pop):active{
-    transform:scale(.92);
-}
-
-
-/* =========================
-   超大饱满气球
-========================= */
 
 .balloon-body{
-
     position:relative;
 
     width:
-        clamp(78px, 17vw, 116px);
+        clamp(79px,18vw,120px);
 
     height:
-        clamp(96px, 20vw, 142px);
+        clamp(99px,21vw,148px);
 
     margin-top:2px;
 
     border-radius:
-        53%
-        53%
-        49%
-        49%
+        53% 53% 49% 49%
         /
-        47%
-        47%
-        55%
-        55%;
+        47% 47% 55% 55%;
 
     background:
 
         radial-gradient(
-            ellipse at 29% 20%,
-            rgba(255,255,255,.98) 0%,
-            rgba(255,255,255,.62) 8%,
-            rgba(255,255,255,.08) 20%,
+            ellipse at 29% 19%,
+            #fff 0,
+            rgba(255,255,255,.58) 8%,
             transparent 28%
         ),
 
         radial-gradient(
             ellipse at 68% 72%,
-            rgba(197,35,91,.22),
+            rgba(197,35,91,.24),
             transparent 52%
         ),
 
         linear-gradient(
             135deg,
-            #ffb9d4 0%,
+            #ffb9d4,
             #ff8fba 28%,
             #f65f99 58%,
             #e94b88 78%,
-            #cf3273 100%
+            #cf3273
         );
 
     border:
-        2px solid rgba(255,255,255,.72);
+        2px solid #ffffffb8;
 
     box-shadow:
 
         inset
-        -9px -12px 18px
-        rgba(157,24,75,.20),
+        -10px -13px 18px
+        #9d184b33,
 
         inset
         8px 8px 15px
-        rgba(255,255,255,.42),
+        #ffffff66,
 
         0 9px 13px
-        rgba(150,35,85,.20);
+        #96235533;
 
     transform:
-        rotate(var(--rotate,0deg));
+        rotate(var(--r,0deg));
 
     animation:
         balloonFloat 3s ease-in-out infinite;
 
-    transition:
-        transform .25s ease,
-        filter .25s ease;
+    transition:.25s;
 }
-
-
-/* 左右高光 */
 
 .balloon-body::before{
     content:"";
@@ -632,14 +530,11 @@ h1{
 
     background:
         linear-gradient(
-            180deg,
-            rgba(255,255,255,.92),
-            rgba(255,255,255,.12)
+            #ffffffe8,
+            #ffffff1f
         );
 
     transform:rotate(14deg);
-
-    filter:blur(.3px);
 }
 
 .balloon-body::after{
@@ -655,55 +550,47 @@ h1{
 
     border-radius:50%;
 
-    background:
-        rgba(255,255,255,.48);
+    background:#ffffff7a;
 
     filter:blur(1px);
 }
 
-
-/* 不同气球轻微旋转 */
-
 .balloon:nth-child(4n+1){
-    --rotate:-3deg;
+    --r:-3deg;
 }
 
 .balloon:nth-child(4n+2){
-    --rotate:2deg;
+    --r:2deg;
     animation-delay:.35s;
 }
 
 .balloon:nth-child(4n+3){
-    --rotate:-1deg;
+    --r:-1deg;
     animation-delay:.7s;
 }
 
 .balloon:nth-child(4n){
-    --rotate:3deg;
+    --r:3deg;
     animation-delay:1s;
 }
 
 @keyframes balloonFloat{
-
-    0%,100%{
-        margin-top:0;
-    }
-
     50%{
         margin-top:-4px;
     }
 }
 
-
-/* =========================
-   气球底部
-========================= */
+.balloon:active .balloon-body{
+    transform:
+        scale(.93)
+        rotate(var(--r));
+}
 
 .knot{
     position:absolute;
 
     top:
-        clamp(94px, 19.5vw, 140px);
+        clamp(97px,20.5vw,146px);
 
     width:17px;
     height:22px;
@@ -722,25 +609,14 @@ h1{
             100% 0
         );
 
-    filter:
-        drop-shadow(
-            0 2px 2px
-            rgba(130,30,70,.2)
-        );
-
     z-index:2;
 }
-
-
-/* =========================
-   蝴蝶结
-========================= */
 
 .bow{
     position:absolute;
 
     top:
-        clamp(104px, 21vw, 151px);
+        clamp(107px,22vw,157px);
 
     width:36px;
     height:18px;
@@ -765,9 +641,6 @@ h1{
             #ff9fc4,
             #df3f78
         );
-
-    box-shadow:
-        inset 0 1px 2px rgba(255,255,255,.6);
 }
 
 .bow::before{
@@ -790,7 +663,8 @@ h1{
     left:50%;
     top:3px;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     width:12px;
     height:12px;
@@ -808,38 +682,30 @@ h1{
     z-index:5;
 }
 
-
-/* =========================
-   气球绳
-========================= */
-
 .string{
     position:absolute;
 
     top:
-        clamp(118px, 23vw, 167px);
+        clamp(121px,24vw,173px);
 
     width:1.5px;
-
     height:17px;
 
     background:
         linear-gradient(
-            180deg,
             #db6390,
-            rgba(255,255,255,.7)
+            #ffffffb3
         );
 
     z-index:1;
 }
 
 
-/* =========================
-   奖励数字
-========================= */
+/* ==========================
+   奖励
+========================== */
 
 .reward{
-
     position:absolute;
 
     left:50%;
@@ -853,16 +719,15 @@ h1{
 
     z-index:10;
 
-    min-width:54px;
+    min-width:53px;
 
-    padding:7px 10px;
+    padding:7px 9px;
 
     border-radius:20px;
 
     background:
         linear-gradient(
-            180deg,
-            #fffdfd,
+            #fff,
             #fff0f7
         );
 
@@ -870,20 +735,17 @@ h1{
 
     border:2px solid white;
 
-    font-size:
-        clamp(12px,3vw,15px);
-
+    font-size:13px;
     font-weight:1000;
 
     box-shadow:
-        0 5px 16px rgba(130,30,75,.2),
-        0 0 14px rgba(255,255,255,.8);
+        0 5px 16px #821e4b33,
+        0 0 14px #ffffffcc;
 
     pointer-events:none;
 }
 
 .balloon.revealed .reward{
-
     opacity:1;
 
     transform:
@@ -891,57 +753,50 @@ h1{
         scale(1);
 
     transition:
-        .35s cubic-bezier(.17,.89,.32,1.5);
+        .35s
+        cubic-bezier(.17,.89,.32,1.5);
 }
 
-
-/* =========================
-   爆开
-========================= */
-
 .balloon.pop .balloon-body{
-
     animation:
-        balloonPop .42s forwards;
+        pop .42s forwards;
 }
 
 .balloon.pop .knot,
 .balloon.pop .bow,
 .balloon.pop .string{
-
     animation:
-        fadeAway .28s forwards;
+        fade .28s forwards;
 }
 
-@keyframes balloonPop{
-
-    0%{
-        transform:scale(1) rotate(var(--rotate));
-        opacity:1;
-    }
-
+@keyframes pop{
     45%{
-        transform:scale(1.18) rotate(var(--rotate));
+        transform:
+            scale(1.18)
+            rotate(var(--r));
+
         opacity:.8;
     }
 
     100%{
-        transform:scale(.05) rotate(var(--rotate));
+        transform:
+            scale(.05)
+            rotate(var(--r));
+
         opacity:0;
     }
 }
 
-@keyframes fadeAway{
-
+@keyframes fade{
     to{
         opacity:0;
     }
 }
 
 
-/* =========================
-   闪光粒子
-========================= */
+/* ==========================
+   闪光
+========================== */
 
 .spark{
     position:fixed;
@@ -962,18 +817,10 @@ h1{
         0 0 18px #ff75a8;
 
     animation:
-        sparkFly .7s ease-out forwards;
+        spark .7s ease-out forwards;
 }
 
-@keyframes sparkFly{
-
-    from{
-        transform:
-            translate(0,0)
-            scale(1);
-        opacity:1;
-    }
-
+@keyframes spark{
     to{
         transform:
             translate(
@@ -987,9 +834,9 @@ h1{
 }
 
 
-/* =========================
-   下方提示
-========================= */
+/* ==========================
+   按钮
+========================== */
 
 .note{
     position:relative;
@@ -997,21 +844,13 @@ h1{
 
     text-align:center;
 
-    margin:11px auto;
+    margin:10px;
 
-    color:#fff;
+    color:white;
 
     font-size:12px;
     font-weight:800;
-
-    text-shadow:
-        0 2px 4px rgba(120,40,75,.18);
 }
-
-
-/* =========================
-   开奖按钮
-========================= */
 
 .gift{
     position:relative;
@@ -1021,7 +860,7 @@ h1{
 
     width:min(420px,90%);
 
-    margin:10px auto 0;
+    margin:8px auto 0;
 
     padding:14px 22px;
 
@@ -1036,15 +875,13 @@ h1{
 
     background:
         linear-gradient(
-            180deg,
             #ff9fc5,
             #e9568c
         );
 
     box-shadow:
-        0 7px 0 #c83a72,
-        0 13px 22px rgba(130,35,75,.22),
-        inset 0 1px 0 rgba(255,255,255,.8);
+        0 7px #c83a72,
+        0 13px 22px #82234b38;
 
     cursor:pointer;
 }
@@ -1053,18 +890,12 @@ h1{
     transform:translateY(5px);
 
     box-shadow:
-        0 2px 0 #c83a72,
-        0 7px 13px rgba(130,35,75,.18);
+        0 2px #c83a72;
 }
 
 .gift:disabled{
-    opacity:.55;
+    opacity:.5;
 }
-
-
-/* =========================
-   Footer
-========================= */
 
 .footer{
     position:relative;
@@ -1072,36 +903,315 @@ h1{
 
     text-align:center;
 
-    margin-top:16px;
+    margin-top:15px;
 
-    color:rgba(255,255,255,.9);
+    color:#ffffffe6;
 
     font-size:11px;
     font-weight:700;
 }
 
 
-/* =========================
-   结果弹窗
-========================= */
+/* ==========================
+   倍率卡弹窗
+========================== */
 
-.overlay{
-
+.card-overlay{
     position:fixed;
 
     inset:0;
 
-    z-index:200;
+    z-index:220;
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
-    padding:20px;
+    padding:16px;
 
     background:
-        rgba(111,25,65,.42);
+        #6f19416e;
+
+    backdrop-filter:
+        blur(9px);
+
+    -webkit-backdrop-filter:
+        blur(9px);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+}
+
+.card-overlay.show{
+    opacity:1;
+    visibility:visible;
+}
+
+.card-panel{
+    width:min(520px,95vw);
+
+    text-align:center;
+
+    padding:
+        20px
+        12px
+        22px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            #fff,
+            #fff0f7
+        );
+
+    border:3px solid #fff;
+
+    box-shadow:
+        0 25px 60px #500f2d4d;
+
+    animation:
+        panelIn .45s ease;
+}
+
+@keyframes panelIn{
+    from{
+        transform:
+            scale(.75)
+            translateY(30px);
+    }
+
+    to{
+        transform:
+            scale(1)
+            translateY(0);
+    }
+}
+
+.card-panel h2{
+    margin:0;
+
+    color:#db4d82;
+
+    font-size:25px;
+    font-weight:1000;
+}
+
+.card-panel p{
+    margin:7px 0 14px;
+
+    color:#a85a79;
+
+    font-size:12px;
+    font-weight:800;
+}
+
+.card-total{
+    display:inline-block;
+
+    margin-bottom:14px;
+
+    padding:7px 15px;
+
+    border-radius:20px;
+
+    background:#ffe3ef;
+
+    color:#df4d83;
+
+    font-weight:1000;
+}
+
+.cards{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:8px;
+
+    max-width:500px;
+
+    margin:auto;
+}
+
+.card{
+    height:174px;
+
+    perspective:900px;
+
+    cursor:pointer;
+}
+
+.card-inner{
+    position:relative;
+
+    width:100%;
+    height:100%;
+
+    transform-style:preserve-3d;
+
+    transition:
+        transform
+        .7s
+        cubic-bezier(.2,.8,.2,1);
+}
+
+.card.flipped .card-inner{
+    transform:
+        rotateY(180deg);
+}
+
+.card-face{
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+
+    border-radius:18px;
+
+    border:3px solid #fff;
+
+    box-shadow:
+        0 8px 15px #8e2d562b;
+
+    backface-visibility:hidden;
+
+    -webkit-backface-visibility:hidden;
+}
+
+
+/* 卡牌背面 */
+
+.card-back{
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #fff8,
+            #ffffff00 25%
+        ),
+        linear-gradient(
+            145deg,
+            #ffb1d0,
+            #ed5b94 55%,
+            #c93370
+        );
+
+    color:white;
+}
+
+.card-back .big{
+    font-size:42px;
+
+    filter:
+        drop-shadow(
+            0 4px 3px #8c255344
+        );
+}
+
+.card-back span{
+    margin-top:7px;
+
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:1px;
+}
+
+
+/* 卡牌正面 */
+
+.card-front{
+    transform:
+        rotateY(180deg);
+
+    background:
+        linear-gradient(
+            #fff,
+            #ffe5f0
+        );
+
+    color:#df4d83;
+}
+
+.card-front .symbol{
+    font-size:38px;
+}
+
+.card-front strong{
+    margin-top:8px;
+
+    font-size:25px;
+}
+
+.card-front small{
+    margin-top:3px;
+
+    color:#b45d7e;
+
+    font-size:10px;
+    font-weight:800;
+}
+
+.card.chosen .card-front{
+    box-shadow:
+        0 0 0 4px #ffd35f,
+        0 0 25px #ffd35f99,
+        0 10px 20px #8e2d5633;
+}
+
+.card.bomb .card-front{
+    background:
+        linear-gradient(
+            #fff7f7,
+            #ffdede
+        );
+
+    color:#d94355;
+}
+
+.card.bomb .card-front strong{
+    color:#d94355;
+}
+
+.card-hint{
+    margin-top:14px;
+
+    color:#bd6789;
+
+    font-size:11px;
+    font-weight:800;
+}
+
+
+/* ==========================
+   最终结果
+========================== */
+
+.overlay{
+    position:fixed;
+
+    inset:0;
+
+    z-index:300;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:18px;
+
+    background:
+        #6f194165;
 
     backdrop-filter:
         blur(8px);
@@ -1112,33 +1222,27 @@ h1{
     opacity:0;
     visibility:hidden;
 
-    transition:
-        opacity .3s ease,
-        visibility .3s ease;
+    transition:.3s;
 }
 
 .overlay.show{
-
     opacity:1;
     visibility:visible;
 }
 
 .result{
-
-    width:min(430px,92vw);
+    width:min(450px,94vw);
 
     padding:
-        27px
-        22px
-        24px;
+        25px
+        19px;
 
-    border-radius:32px;
+    border-radius:30px;
 
     text-align:center;
 
     background:
         linear-gradient(
-            180deg,
             #fff,
             #fff1f7
         );
@@ -1146,38 +1250,42 @@ h1{
     border:3px solid white;
 
     box-shadow:
-        0 25px 60px rgba(80,15,45,.3);
+        0 25px 60px #500f2d4d;
 
-    transform:
-        scale(.7)
-        translateY(30px);
-
-    transition:
-        transform .45s cubic-bezier(.17,.89,.32,1.35);
+    animation:
+        resultIn .5s
+        cubic-bezier(.17,.89,.32,1.35);
 }
 
-.overlay.show .result{
+@keyframes resultIn{
+    from{
+        transform:
+            scale(.65)
+            translateY(30px);
+    }
 
-    transform:
-        scale(1)
-        translateY(0);
+    to{
+        transform:
+            scale(1)
+            translateY(0);
+    }
 }
 
 .result .emoji{
-    font-size:42px;
+    font-size:40px;
 }
 
 .result h2{
-    margin:7px 0;
+    margin:6px 0;
 
     color:#df4d83;
 
-    font-size:26px;
+    font-size:25px;
     font-weight:1000;
 }
 
 .result p{
-    margin:0 0 17px;
+    margin:0 0 14px;
 
     color:#a85a79;
 
@@ -1186,14 +1294,12 @@ h1{
 }
 
 .totalBox{
+    padding:14px;
 
-    padding:17px;
-
-    border-radius:22px;
+    border-radius:20px;
 
     background:
         linear-gradient(
-            180deg,
             #fff,
             #ffe3ef
         );
@@ -1202,31 +1308,26 @@ h1{
 
     color:#b25177;
 
-    font-size:14px;
+    font-size:13px;
     font-weight:800;
 }
 
 .totalBox strong{
-
     display:inline-block;
 
-    margin-top:3px;
+    margin-top:4px;
 
     color:#e64d86;
 
     font-size:48px;
 
     line-height:1;
-
-    text-shadow:
-        0 3px 5px rgba(180,45,90,.15);
 }
 
 .again{
-
     width:100%;
 
-    margin-top:16px;
+    margin-top:14px;
 
     padding:13px;
 
@@ -1236,7 +1337,6 @@ h1{
 
     background:
         linear-gradient(
-            180deg,
             #ff9fc4,
             #e9588c
         );
@@ -1247,26 +1347,16 @@ h1{
     font-weight:1000;
 
     box-shadow:
-        0 5px 0 #c63b72,
-        0 9px 18px rgba(150,40,85,.18);
-
-    cursor:pointer;
-}
-
-.again:active{
-    transform:translateY(4px);
-
-    box-shadow:
-        0 1px 0 #c63b72;
+        0 5px #c63b72,
+        0 9px 18px #9628552e;
 }
 
 
-/* =========================
+/* ==========================
    彩纸
-========================= */
+========================== */
 
 .confetti{
-
     position:fixed;
 
     top:-15px;
@@ -1274,19 +1364,18 @@ h1{
     width:8px;
     height:13px;
 
-    z-index:300;
-
-    animation:
-        confettiFall
-        var(--duration)
-        linear
-        forwards;
+    z-index:400;
 
     pointer-events:none;
+
+    animation:
+        fall
+        var(--d)
+        linear
+        forwards;
 }
 
-@keyframes confettiFall{
-
+@keyframes fall{
     to{
         transform:
             translate3d(
@@ -1294,67 +1383,54 @@ h1{
                 110vh,
                 0
             )
-            rotate(
-                720deg
-            );
+            rotate(720deg);
 
         opacity:.8;
     }
 }
 
 
-/* =========================
-   小屏 iPhone
-========================= */
+/* ==========================
+   小屏手机
+========================== */
 
 @media(max-width:390px){
 
-    .app{
-        padding-left:8px;
-        padding-right:8px;
-    }
-
     .curtain{
-        width:55px;
+        width:52px;
     }
 
     .hero{
-        padding-top:28px;
+        padding-top:25px;
     }
 
-    h1{
-        font-size:30px;
-        letter-spacing:2px;
-    }
-
-    .stats{
-        gap:5px;
+    .stage{
+        padding:9px;
     }
 
     .stat{
-        font-size:10px;
-        min-height:44px;
+        font-size:9px;
     }
 
-    .stat span{
+    .stat b{
         font-size:15px;
     }
 
     .balloons{
-        gap:5px 3px;
+        gap:3px 1px;
     }
 
     .balloon{
-        height:116px;
+        height:119px;
     }
 
     .balloon-body{
-        width:72px;
+        width:71px;
         height:91px;
     }
 
     .knot{
-        top:89px;
+        top:88px;
     }
 
     .bow{
@@ -1362,52 +1438,32 @@ h1{
     }
 
     .string{
-        top:111px;
+        top:110px;
     }
 
-    .gift{
-        font-size:14px;
-    }
-}
-
-
-/* =========================
-   更大的手机
-========================= */
-
-@media(min-width:600px){
-
-    .balloon{
-        height:185px;
+    .card{
+        height:145px;
     }
 
-    .balloon-body{
-        width:120px;
-        height:148px;
+    .card-back .big{
+        font-size:34px;
     }
 
-    .knot{
-        top:145px;
+    .card-front .symbol{
+        font-size:30px;
     }
 
-    .bow{
-        top:155px;
-    }
-
-    .string{
-        top:172px;
+    .card-front strong{
+        font-size:20px;
     }
 }
-
 </style>
 </head>
-
 
 <body>
 
 <div class="app">
 
-    <!-- 顶部灯光 -->
     <div class="lights">
         <span></span>
         <span></span>
@@ -1419,27 +1475,14 @@ h1{
         <span></span>
     </div>
 
-    <!-- 两侧幕布 -->
     <div class="curtain left"></div>
     <div class="curtain right"></div>
 
-
-    <!-- 音效 -->
-    <button
-        class="sound"
-        id="sound"
-        aria-label="声音">
-        🔊
-    </button>
-
-
-    <!-- 标题 -->
+    <button class="sound" id="sound">🔊</button>
 
     <header class="hero">
 
-        <div class="crown">
-            👑
-        </div>
+        <div class="crown">👑</div>
 
         <div class="badge">
             🎀 TODAY'S LUCKY 🎀
@@ -1450,13 +1493,11 @@ h1{
         </h1>
 
         <p>
-            选择 10 个气球，看看今天能获得多少钻石！
+            选择 10 个气球，赢取你的幸运钻石！
         </p>
 
     </header>
 
-
-    <!-- 数据 -->
 
     <section class="stage">
 
@@ -1464,39 +1505,31 @@ h1{
 
             <div class="stat">
                 本局钻石 💎
-                <span id="total">0</span>
+                <b id="total">0</b>
             </div>
 
             <div class="stat">
                 已选择
-                <span id="count">0</span>/10
+                <b id="count">0</b>/10
             </div>
 
             <div class="stat">
                 单颗最高 💎
-                <span>100</span>
+                <b>200</b>
             </div>
 
         </div>
-
 
         <div class="progress">
             <i id="bar"></i>
         </div>
 
-
-        <div
-            class="helper"
-            id="helper">
-
+        <div class="helper" id="helper">
             从下面 16 个气球中任选 10 个 ✨
-
         </div>
 
     </section>
 
-
-    <!-- 气球区域 -->
 
     <section class="balloon-board">
 
@@ -1515,7 +1548,7 @@ h1{
 
 
     <div class="note">
-        💗 每选一个气球，都有机会获得钻石哦~ 💗
+        💗 每个气球都有机会获得 5～200 💎 💗
     </div>
 
 
@@ -1535,7 +1568,48 @@ h1{
 </div>
 
 
-<!-- 最终结果 -->
+<!-- ==========================
+     倍率卡
+========================== -->
+
+<div
+    class="card-overlay"
+    id="cardOverlay">
+
+    <div class="card-panel">
+
+        <h2>
+            🎴 幸运倍率卡 🎴
+        </h2>
+
+        <p>
+            10 个气球全部打开啦！<br>
+            选择一张神秘卡决定最终钻石。
+        </p>
+
+        <div class="card-total">
+            当前钻石：
+            <b id="cardTotal">0</b>
+            💎
+        </div>
+
+        <div
+            class="cards"
+            id="cards">
+        </div>
+
+        <div class="card-hint">
+            每局卡牌位置都会随机 · 选中后才会翻开
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================
+     最终结果
+========================== -->
 
 <div
     class="overlay"
@@ -1552,12 +1626,12 @@ h1{
         </h2>
 
         <p>
-            10 个气球全部打开啦 · 今天的好运爆棚！
+            幸运倍率卡已经揭晓！
         </p>
 
         <div class="totalBox">
 
-            本轮一共获得
+            最终获得
 
             <br>
 
@@ -1568,7 +1642,6 @@ h1{
             💎
 
         </div>
-
 
         <button
             class="again"
@@ -1585,20 +1658,37 @@ h1{
 
 <script>
 
-/* =========================
-   游戏数据
-========================= */
+/* ==========================
+   游戏规则
+========================== */
 
 const rewards = [
-    1,
     5,
     10,
     20,
     30,
     50,
-    70,
-    100
+    100,
+    200
 ];
+
+
+/*
+    四张倍率卡
+
+    1     = ×1
+    1.5   = ×1.5
+    2     = ×2
+    bomb  = ÷2
+*/
+
+const multipliers = [
+    "1",
+    "1.5",
+    "2",
+    "bomb"
+];
+
 
 let selected = 0;
 let total = 0;
@@ -1606,10 +1696,12 @@ let total = 0;
 let soundOn = true;
 let audio = null;
 
+let cardLocked = false;
 
-/* =========================
+
+/* ==========================
    DOM
-========================= */
+========================== */
 
 const balloonsBox =
     document.getElementById("balloons");
@@ -1641,14 +1733,24 @@ const again =
 const soundButton =
     document.getElementById("sound");
 
+const cardOverlay =
+    document.getElementById("cardOverlay");
 
-/* =========================
-   音效系统
-========================= */
+const cardsBox =
+    document.getElementById("cards");
+
+const cardTotal =
+    document.getElementById("cardTotal");
+
+
+/* ==========================
+   音效
+========================== */
 
 function audioCtx(){
 
-    if(!soundOn) return;
+    if(!soundOn)
+        return;
 
     if(!audio){
 
@@ -1660,7 +1762,9 @@ function audioCtx(){
 
     }
 
-    if(audio.state === "suspended"){
+    if(
+        audio.state === "suspended"
+    ){
 
         audio.resume();
 
@@ -1669,18 +1773,19 @@ function audioCtx(){
 }
 
 
-function playTone(
+function tone(
     frequency,
     duration,
-    type="sine",
     volume=.05
 ){
 
-    if(!soundOn) return;
+    if(!soundOn)
+        return;
 
     audioCtx();
 
-    if(!audio) return;
+    if(!audio)
+        return;
 
     const oscillator =
         audio.createOscillator();
@@ -1688,7 +1793,8 @@ function playTone(
     const gain =
         audio.createGain();
 
-    oscillator.type = type;
+    oscillator.type =
+        "sine";
 
     oscillator.frequency.value =
         frequency;
@@ -1717,10 +1823,9 @@ function playTone(
 
 function clickSound(){
 
-    playTone(
+    tone(
         500,
         .08,
-        "sine",
         .045
     );
 
@@ -1729,64 +1834,67 @@ function clickSound(){
 
 function rewardSound(){
 
-    playTone(
+    tone(
         720,
         .12,
-        "sine",
         .05
     );
 
-    setTimeout(()=>{
-        playTone(
-            980,
-            .18,
-            "sine",
-            .045
-        );
-    },70);
+    setTimeout(
+        ()=>{
+            tone(
+                980,
+                .18,
+                .045
+            );
+        },
+        70
+    );
 
 }
 
 
 function victorySound(){
 
-    if(!soundOn) return;
-
     [
-        [523,.0],
-        [659,.12],
-        [784,.24],
-        [1046,.38]
-    ].forEach(([freq,delay])=>{
+        523,
+        659,
+        784,
+        1046
+    ].forEach(
+        (frequency,index)=>{
 
-        setTimeout(()=>{
-
-            playTone(
-                freq,
-                .28,
-                "sine",
-                .07
+            setTimeout(
+                ()=>{
+                    tone(
+                        frequency,
+                        .28,
+                        .07
+                    );
+                },
+                index * 120
             );
 
-        },delay * 1000);
-
-    });
+        }
+    );
 
 }
 
 
-/* =========================
+/* ==========================
    震动
-========================= */
+========================== */
 
-function vibrate(){
+function vibrate(
+    time=12
+){
 
     if(
         navigator.vibrate
     ){
 
         navigator.vibrate(
-            12
+            time
         );
 
     }
@@ -1794,90 +1902,45 @@ function vibrate(){
 }
 
 
-/* =========================
+/* ==========================
    创建气球
-========================= */
+========================== */
 
 function createBalloon(){
 
     const balloon =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     balloon.className =
         "balloon";
 
 
-    const body =
-        document.createElement("div");
+    balloon.innerHTML = `
 
-    body.className =
-        "balloon-body";
+        <div class="balloon-body"></div>
 
+        <div class="reward"></div>
 
-    const knot =
-        document.createElement("div");
+        <div class="knot"></div>
 
-    knot.className =
-        "knot";
+        <div class="bow">
+            <div class="bow-dot"></div>
+        </div>
 
+        <div class="string"></div>
 
-    const bow =
-        document.createElement("div");
-
-    bow.className =
-        "bow";
-
-
-    const bowDot =
-        document.createElement("div");
-
-    bowDot.className =
-        "bow-dot";
-
-
-    const string =
-        document.createElement("div");
-
-    string.className =
-        "string";
-
-
-    const reward =
-        document.createElement("div");
-
-    reward.className =
-        "reward";
-
-
-    bow.appendChild(
-        bowDot
-    );
-
-
-    balloon.appendChild(
-        body
-    );
-
-    balloon.appendChild(
-        reward
-    );
-
-    balloon.appendChild(
-        knot
-    );
-
-    balloon.appendChild(
-        bow
-    );
-
-    balloon.appendChild(
-        string
-    );
+    `;
 
 
     balloon.addEventListener(
         "click",
-        ()=>pickBalloon(balloon)
+        ()=>{
+            pickBalloon(
+                balloon
+            );
+        }
     );
 
 
@@ -1885,13 +1948,13 @@ function createBalloon(){
 }
 
 
-/* =========================
-   创建16个
-========================= */
+/* ==========================
+   创建16个气球
+========================== */
 
 function makeBalloons(){
 
-    balloonsBox.innerHTML="";
+    balloonsBox.innerHTML = "";
 
     for(
         let i=0;
@@ -1908,20 +1971,25 @@ function makeBalloons(){
 }
 
 
-/* =========================
+/* ==========================
    点击气球
-========================= */
+========================== */
 
-function pickBalloon(balloon){
+function pickBalloon(
+    balloon
+){
 
     if(
         selected >= 10
-    ) return;
-
+    )
+        return;
 
     if(
-        balloon.classList.contains("pop")
-    ) return;
+        balloon.classList.contains(
+            "pop"
+        )
+    )
+        return;
 
 
     audioCtx();
@@ -1959,17 +2027,17 @@ function pickBalloon(balloon){
     );
 
 
-    setTimeout(()=>{
-
-        balloon.classList.add(
-            "pop"
-        );
-
-    },280);
+    setTimeout(
+        ()=>{
+            balloon.classList.add(
+                "pop"
+            );
+        },
+        280
+    );
 
 
     clickSound();
-
 
     setTimeout(
         rewardSound,
@@ -1989,13 +2057,14 @@ function pickBalloon(balloon){
         selected === 10
     ){
 
-        gift.disabled = true;
+        gift.disabled =
+            true;
 
         helper.textContent =
-            "🎉 10 个幸运气球已经全部开启！";
+            "🎉 10 个幸运气球全部开启！";
 
         setTimeout(
-            showResult,
+            openCards,
             900
         );
 
@@ -2004,9 +2073,9 @@ function pickBalloon(balloon){
 }
 
 
-/* =========================
-   更新UI
-========================= */
+/* ==========================
+   更新
+========================== */
 
 function update(){
 
@@ -2017,7 +2086,9 @@ function update(){
         total;
 
     bar.style.width =
-        (selected / 10 * 100) + "%";
+        (
+            selected / 10 * 100
+        ) + "%";
 
 
     if(
@@ -2032,15 +2103,16 @@ function update(){
 }
 
 
-/* =========================
+/* ==========================
    闪光
-========================= */
+========================== */
 
-function createSparks(balloon){
+function createSparks(
+    element
+){
 
     const rect =
-        balloon.getBoundingClientRect();
-
+        element.getBoundingClientRect();
 
     const centerX =
         rect.left +
@@ -2077,7 +2149,6 @@ function createSparks(balloon){
             Math.random() *
             Math.PI *
             2;
-
 
         const distance =
             35 +
@@ -2118,31 +2189,344 @@ function createSparks(balloon){
 }
 
 
-/* =========================
-   最终结果
-========================= */
+/* ==========================
+   随机排序
+========================== */
 
-function showResult(){
+function shuffle(
+    array
+){
+
+    return array.sort(
+        ()=>{
+            return Math.random() - .5;
+        }
+    );
+
+}
+
+
+/* ==========================
+   打开倍率卡
+========================== */
+
+function openCards(){
+
+    cardTotal.textContent =
+        total;
+
+    cardsBox.innerHTML =
+        "";
+
+    cardLocked =
+        false;
+
+
+    cardOverlay.classList.add(
+        "show"
+    );
+
+
+    const deck =
+        shuffle(
+            [
+                ...multipliers
+            ]
+        );
+
+
+    deck.forEach(
+        type => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "card";
+
+
+            let front;
+
+
+            if(
+                type === "bomb"
+            ){
+
+                front = `
+
+                    <div class="card-front">
+
+                        <div class="symbol">
+                            💣
+                        </div>
+
+                        <strong>
+                            ÷2
+                        </strong>
+
+                        <small>
+                            炸弹！钻石减半
+                        </small>
+
+                    </div>
+
+                `;
+
+            }else{
+
+                front = `
+
+                    <div class="card-front">
+
+                        <div class="symbol">
+                            💎
+                        </div>
+
+                        <strong>
+                            ×${type}
+                        </strong>
+
+                        <small>
+                            幸运倍率
+                        </small>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="card-inner">
+
+                    <div class="card-face card-back">
+
+                        <div class="big">
+                            🎴
+                        </div>
+
+                        <span>
+                            神秘卡
+                        </span>
+
+                    </div>
+
+                    ${front}
+
+                </div>
+
+            `;
+
+
+            card.addEventListener(
+                "click",
+                ()=>{
+                    chooseCard(
+                        card,
+                        type
+                    );
+                }
+            );
+
+
+            cardsBox.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* ==========================
+   选择倍率卡
+========================== */
+
+function chooseCard(
+    card,
+    type
+){
+
+    if(cardLocked)
+        return;
+
+
+    if(
+        card.classList.contains(
+            "flipped"
+        )
+    )
+        return;
+
+
+    cardLocked =
+        true;
+
+
+    card.classList.add(
+        "flipped",
+        "chosen"
+    );
+
+
+    if(
+        type === "bomb"
+    ){
+
+        card.classList.add(
+            "bomb"
+        );
+
+    }
+
+
+    vibrate(25);
+
+
+    if(
+        type === "bomb"
+    ){
+
+        tone(
+            220,
+            .2,
+            .08
+        );
+
+    }else{
+
+        tone(
+            800,
+            .16,
+            .06
+        );
+
+    }
+
+
+    setTimeout(
+        ()=>{
+
+            let final;
+
+
+            if(
+                type === "bomb"
+            ){
+
+                /*
+                    炸弹 ÷2
+                */
+
+                final =
+                    total / 2;
+
+            }
+
+            else if(
+                type === "1.5"
+            ){
+
+                /*
+                    总数 ×1.5
+                */
+
+                final =
+                    total * 1.5;
+
+            }
+
+            else if(
+                type === "2"
+            ){
+
+                /*
+                    总数 ×2
+                */
+
+                final =
+                    total * 2;
+
+            }
+
+            else{
+
+                /*
+                    ×1
+                */
+
+                final =
+                    total;
+
+            }
+
+
+            /*
+                如果出现小数，
+                自动四舍五入。
+            */
+
+            final =
+                Math.round(
+                    final
+                );
+
+
+            setTimeout(
+                ()=>{
+                    showResult(
+                        final
+                    );
+                },
+                700
+            );
+
+        },
+        700
+    );
+
+}
+
+
+/* ==========================
+   最终结果
+========================== */
+
+function showResult(
+    final
+){
+
+    cardOverlay.classList.remove(
+        "show"
+    );
+
 
     finalTotal.textContent =
-        total;
+        final;
+
 
     overlay.classList.add(
         "show"
     );
 
+
     victorySound();
 
-    vibrate();
+    vibrate(30);
 
     createConfetti();
 
 }
 
 
-/* =========================
+/* ==========================
    彩纸
-========================= */
+========================== */
 
 function createConfetti(){
 
@@ -2177,7 +2561,7 @@ function createConfetti(){
 
 
         confetti.style.setProperty(
-            "--duration",
+            "--d",
             (
                 1.8 +
                 Math.random()*2
@@ -2199,10 +2583,6 @@ function createConfetti(){
             ];
 
 
-        confetti.style.transform =
-            `rotate(${Math.random()*360}deg)`;
-
-
         document.body.appendChild(
             confetti
         );
@@ -2220,21 +2600,33 @@ function createConfetti(){
 }
 
 
-/* =========================
-   再来一局
-========================= */
+/* ==========================
+   重新开始
+========================== */
 
 function resetGame(){
 
-    selected = 0;
+    selected =
+        0;
 
-    total = 0;
+    total =
+        0;
 
-    gift.disabled = false;
+    cardLocked =
+        false;
+
+    gift.disabled =
+        false;
+
 
     overlay.classList.remove(
         "show"
     );
+
+    cardOverlay.classList.remove(
+        "show"
+    );
+
 
     makeBalloons();
 
@@ -2243,17 +2635,19 @@ function resetGame(){
 }
 
 
-/* =========================
+/* ==========================
    按钮
-========================= */
+========================== */
 
 gift.addEventListener(
     "click",
     ()=>{
 
-        if(selected === 10){
+        if(
+            selected === 10
+        ){
 
-            showResult();
+            openCards();
 
         }
 
@@ -2274,6 +2668,7 @@ soundButton.addEventListener(
         soundOn =
             !soundOn;
 
+
         soundButton.textContent =
             soundOn
             ? "🔊"
@@ -2284,7 +2679,7 @@ soundButton.addEventListener(
 
             audioCtx();
 
-            playTone(
+            tone(
                 700,
                 .1
             );
@@ -2295,23 +2690,23 @@ soundButton.addEventListener(
 );
 
 
-/* =========================
+/* ==========================
    初始化
-========================= */
+========================== */
 
 makeBalloons();
 
 update();
 
 
-/* 防止双击缩放 */
-
 document.addEventListener(
     "dblclick",
-    e=>{
-        e.preventDefault();
+    event=>{
+        event.preventDefault();
     },
-    {passive:false}
+    {
+        passive:false
+    }
 );
 
 </script>

@@ -1108,11 +1108,6 @@ h1{
     align-items:center;
 }
 
-
-/*
-   所有卡牌固定完全相同尺寸
-*/
-
 .multiplier-card{
 
     height:145px;
@@ -1139,23 +1134,12 @@ h1{
         box-shadow .35s ease;
 }
 
-
-/*
-   卡牌翻开后停止跳动
-*/
-
 .multiplier-card.flipped{
 
     cursor:default;
 
     animation:none !important;
 }
-
-
-/*
-   抽中的卡牌：
-   不改变大小，只增加发光
-*/
 
 .multiplier-card.selected-card{
 
@@ -1171,22 +1155,12 @@ h1{
         filter .5s ease;
 }
 
-
-/*
-   抽中的卡牌最后翻开
-*/
-
 .multiplier-card.selected-card.flipped{
 
     filter:
         drop-shadow(0 0 15px rgba(255,105,165,.95))
         drop-shadow(0 0 30px rgba(255,170,205,.8));
 }
-
-
-/*
-   其他已经翻开的卡牌
-*/
 
 .multiplier-card.revealed-other{
 
@@ -1196,9 +1170,6 @@ h1{
 
     cursor:default;
 }
-
-
-/* 卡牌随机跳动 */
 
 @keyframes multiplierRandomJump{
 
@@ -1251,7 +1222,6 @@ h1{
 
 }
 
-
 .card-inner{
 
     position:relative;
@@ -1291,9 +1261,6 @@ h1{
 
     text-align:center;
 }
-
-
-/* 卡牌正面：完全隐藏内容 */
 
 .card-front{
 
@@ -1373,11 +1340,6 @@ h1{
     white-space:nowrap;
 }
 
-
-/*
-   清空卡牌样式
-*/
-
 .multiplier-card.clear-card .multiplier-value{
 
     color:#d83f78;
@@ -1387,20 +1349,10 @@ h1{
     white-space:nowrap;
 }
 
-
-/*
-   ×1卡牌正常显示
-*/
-
 .multiplier-card.x1-card .multiplier-value{
 
     color:#e24e87;
 }
-
-
-/*
-   ×3卡牌
-*/
 
 .multiplier-card.x3-card .multiplier-value{
 
@@ -1408,11 +1360,6 @@ h1{
 
     font-weight:1000;
 }
-
-
-/*
-   鼠标悬停
-*/
 
 .multiplier-card:not(.flipped):not(.selected-card):hover{
 
@@ -1687,10 +1634,6 @@ h1{
         font-size:11px;
     }
 
-    /*
-       手机仍然保持 4列 × 2行
-    */
-
     .multiplier-cards{
         grid-template-columns:
             repeat(4, minmax(0,1fr));
@@ -1796,10 +1739,6 @@ h1{
     .gift{
         font-size:14px;
     }
-
-    /*
-       超小屏仍然保持 4列 × 2行
-    */
 
     .multiplier-cards{
         grid-template-columns:
@@ -2099,12 +2038,6 @@ const rewards = [
 /*
    最终8张卡牌
 
-   4张原本倍数卡
-   + 1张额外 ×1
-   + 2张清空
-   + 1张 ×3
-
-   最终：
    ×1
    ×1.5
    ×2
@@ -2181,6 +2114,183 @@ let selectedCardItem = null;
 let soundOn = true;
 
 let audio = null;
+
+
+/* =========================
+   背景音乐
+   梦幻 / 音乐盒 / 幸运游戏风格
+========================= */
+
+let bgmTimer = null;
+
+let bgmStep = 0;
+
+let bgmGain = null;
+
+
+/*
+   这里使用 WebAudio
+   不需要上传任何 MP3
+*/
+
+const bgmMelody = [
+    523.25,
+    659.25,
+    783.99,
+    659.25,
+    587.33,
+    698.46,
+    880.00,
+    698.46,
+
+    523.25,
+    659.25,
+    783.99,
+    987.77,
+    880.00,
+    783.99,
+    659.25,
+    523.25
+];
+
+
+function startBGM(){
+
+    if(!soundOn) return;
+
+    audioCtx();
+
+    if(!audio) return;
+
+    if(bgmTimer) return;
+
+
+    /*
+       创建非常轻的背景音量
+    */
+
+    if(!bgmGain){
+
+        bgmGain =
+            audio.createGain();
+
+        bgmGain.gain.value =
+            0.018;
+
+        bgmGain.connect(
+            audio.destination
+        );
+
+    }
+
+
+    bgmStep = 0;
+
+
+    const playNext = ()=>{
+
+        if(!soundOn){
+
+            stopBGM();
+
+            return;
+
+        }
+
+
+        if(!audio) return;
+
+
+        const frequency =
+            bgmMelody[
+                bgmStep %
+                bgmMelody.length
+            ];
+
+
+        const osc =
+            audio.createOscillator();
+
+        const gain =
+            audio.createGain();
+
+
+        osc.type =
+            "sine";
+
+        osc.frequency.value =
+            frequency;
+
+
+        const now =
+            audio.currentTime;
+
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            now
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.55,
+            now + .06
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + .62
+        );
+
+
+        osc.connect(gain);
+
+        gain.connect(
+            bgmGain
+        );
+
+
+        osc.start(now);
+
+        osc.stop(
+            now + .68
+        );
+
+
+        bgmStep++;
+
+
+        bgmTimer =
+            setTimeout(
+                ()=>{
+                    bgmTimer = null;
+                    playNext();
+                },
+                620
+            );
+
+    };
+
+
+    playNext();
+
+}
+
+
+function stopBGM(){
+
+    if(bgmTimer){
+
+        clearTimeout(
+            bgmTimer
+        );
+
+        bgmTimer = null;
+
+    }
+
+}
 
 
 /* =========================
@@ -2567,6 +2677,13 @@ function pickBalloon(balloon){
 
     audioCtx();
 
+    /*
+       第一次点击气球后
+       自动启动背景音乐
+    */
+
+    startBGM();
+
     vibrate();
 
 
@@ -2806,10 +2923,6 @@ function showMultiplierCards(){
                 "multiplier-card";
 
 
-            /*
-               特殊卡牌增加 class
-            */
-
             if(
                 item.type === "clear"
             ){
@@ -2842,10 +2955,6 @@ function showMultiplierCards(){
 
             }
 
-
-            /*
-               每张卡牌随机跳动参数
-            */
 
             const jumpX =
                 3 +
@@ -2994,10 +3103,6 @@ function chooseMultiplier(
     item
 ){
 
-    /*
-       防止重复点击
-    */
-
     if(
         card.classList.contains("flipped")
     ) return;
@@ -3007,10 +3112,6 @@ function chooseMultiplier(
         selectedCardItem
     ) return;
 
-
-    /*
-       记录抽中的卡
-    */
 
     selectedCardItem =
         item;
@@ -3027,14 +3128,10 @@ function chooseMultiplier(
 
 
     /*
-       =========================
-       第一阶段
-
        抽中的卡：
        只增加发光
        不翻开
        不改变大小
-       =========================
     */
 
     card.classList.add(
@@ -3052,17 +3149,13 @@ function chooseMultiplier(
 
 
     /*
-       给抽中的卡留一点悬念时间
+       等待一下
     */
 
     setTimeout(()=>{
 
         /*
-           =========================
-           第二阶段
-
            先翻开其他7张
-           =========================
         */
 
         const allCards =
@@ -3091,10 +3184,6 @@ function chooseMultiplier(
                     );
 
 
-                    /*
-                       翻牌音效
-                    */
-
                     playTone(
                         650 + index * 80,
                         .13,
@@ -3121,11 +3210,7 @@ function chooseMultiplier(
 
 
         /*
-           =========================
-           第三阶段
-
            其他7张全部展示完
-           =========================
         */
 
         setTimeout(()=>{
@@ -3140,13 +3225,8 @@ function chooseMultiplier(
 
             setTimeout(()=>{
 
-
                 /*
-                   =========================
-                   第四阶段
-
                    最后才打开抽中的卡
-                   =========================
                 */
 
                 card.classList.add(
@@ -3175,10 +3255,6 @@ function chooseMultiplier(
                 }
 
 
-                /*
-                   最终卡牌音效
-                */
-
                 setTimeout(()=>{
 
                     multiplierSound();
@@ -3198,11 +3274,6 @@ function chooseMultiplier(
                         "show"
                     );
 
-
-                    /*
-                       弹窗关闭后
-                       进入最终结果
-                    */
 
                     setTimeout(
                         showResult,
@@ -3405,6 +3476,10 @@ gift.addEventListener(
             selected === 10
         ){
 
+            audioCtx();
+
+            startBGM();
+
             showMultiplierCards();
 
         }
@@ -3419,12 +3494,20 @@ gift.addEventListener(
 
 again.addEventListener(
     "click",
-    resetGame
+    ()=>{
+
+        audioCtx();
+
+        startBGM();
+
+        resetGame();
+
+    }
 );
 
 
 /* =========================
-   声音
+   声音 / 背景音乐
 ========================= */
 
 soundButton.addEventListener(
@@ -3444,10 +3527,16 @@ soundButton.addEventListener(
 
             audioCtx();
 
+            startBGM();
+
             playTone(
                 700,
                 .1
             );
+
+        }else{
+
+            stopBGM();
 
         }
 

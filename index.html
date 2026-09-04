@@ -1190,7 +1190,101 @@ h1{
     perspective:900px;
 
     user-select:none;
+
+    /*
+       新增：
+       每张卡牌的跳动参数由 JS
+       每一局随机生成
+    */
+
+    animation:
+        multiplierRandomJump
+        var(--jump-duration,1.4s)
+        ease-in-out
+        var(--jump-delay,0s)
+        infinite;
 }
+
+
+/* =========================
+   新增：卡牌随机跳动
+========================= */
+
+@keyframes multiplierRandomJump{
+
+    0%,100%{
+
+        transform:
+            translate(0,0)
+            rotate(0deg);
+
+    }
+
+    25%{
+
+        transform:
+            translate(
+                var(--jump-x),
+                calc(var(--jump-y) * -1)
+            )
+            rotate(
+                var(--jump-rotate)
+            );
+
+    }
+
+    50%{
+
+        transform:
+            translate(
+                calc(var(--jump-x) * -1),
+                var(--jump-y)
+            )
+            rotate(
+                calc(var(--jump-rotate) * -1)
+            );
+
+    }
+
+    75%{
+
+        transform:
+            translate(
+                calc(var(--jump-x) * .5),
+                calc(var(--jump-y) * -0.6)
+            )
+            rotate(
+                calc(var(--jump-rotate) * .5)
+            );
+
+    }
+
+}
+
+
+/* 点击后停止随机跳动 */
+
+.multiplier-card.flipped{
+
+    cursor:default;
+
+    animation:none !important;
+}
+
+
+/* 其他卡牌停止跳动 */
+
+.multiplier-card.disabled-card{
+
+    opacity:.35;
+
+    pointer-events:none;
+
+    transform:scale(.94);
+
+    animation:none !important;
+}
+
 
 .card-inner{
 
@@ -1782,7 +1876,7 @@ h1{
 
             <div class="stat">
                 单颗最高 💎
-                <span>100</span>
+                <span>300</span>
             </div>
 
         </div>
@@ -1950,9 +2044,6 @@ const rewards = [
 
 /*
    倍数卡牌
-   注意：
-   这里虽然已经定义内容，
-   但页面在点击前不会显示。
 */
 
 const multipliers = [
@@ -2435,11 +2526,6 @@ function pickBalloon(balloon){
         helper.textContent =
             "🎉 10 个幸运气球已经全部开启！";
 
-        /*
-           气球全部打开后，
-           不直接显示最终结果。
-           先进入倍数卡牌。
-        */
 
         setTimeout(
             showMultiplierCards,
@@ -2571,27 +2657,23 @@ function createSparks(balloon){
 
 function showMultiplierCards(){
 
-    /*
-       显示基础钻石
-    */
-
     baseReward.textContent =
         total;
 
-
-    /*
-       清空旧卡牌
-    */
 
     multiplierCards.innerHTML="";
 
 
     /*
-       打乱倍数顺序
+       每一局重新随机排列。
 
-       所以每次游戏：
-       ×1、×1.5、×2、÷2
-       的位置都会随机。
+       所以：
+       ×1
+       ×1.5
+       ×2
+       ÷2
+
+       每次出现的位置都会不同。
     */
 
     const shuffled =
@@ -2614,10 +2696,86 @@ function showMultiplierCards(){
 
 
             /*
+               =====================================
+               新增：
+               每一张卡牌随机生成自己的跳动参数
+               =====================================
+            */
+
+
+            /*
+               跳动距离：
+               6 ~ 13 px
+            */
+
+            const jumpX =
+                4 +
+                Math.random() * 8;
+
+            const jumpY =
+                6 +
+                Math.random() * 9;
+
+
+            /*
+               随机旋转：
+               2 ~ 5 度
+            */
+
+            const jumpRotate =
+                2 +
+                Math.random() * 3;
+
+
+            /*
+               随机速度：
+               1.1 ~ 1.8 秒
+            */
+
+            const jumpDuration =
+                1.1 +
+                Math.random() * .7;
+
+
+            /*
+               随机开始时间：
+               让4张卡不要同时跳
+            */
+
+            const jumpDelay =
+                Math.random() * 1.2;
+
+
+            card.style.setProperty(
+                "--jump-x",
+                jumpX + "px"
+            );
+
+            card.style.setProperty(
+                "--jump-y",
+                jumpY + "px"
+            );
+
+            card.style.setProperty(
+                "--jump-rotate",
+                jumpRotate + "deg"
+            );
+
+            card.style.setProperty(
+                "--jump-duration",
+                jumpDuration + "s"
+            );
+
+            card.style.setProperty(
+                "--jump-delay",
+                jumpDelay + "s"
+            );
+
+
+            /*
                重要：
-               这里没有把倍率直接放到
-               卡牌正面。
-               正面永远只有 🎀。
+               正面仍然完全隐藏倍率。
+               玩家看到的只有 🎀。
             */
 
             card.innerHTML = `
@@ -2678,10 +2836,6 @@ function chooseMultiplier(
     item
 ){
 
-    /*
-       已经翻过就不能再次点击
-    */
-
     if(
         card.classList.contains(
             "flipped"
@@ -2690,7 +2844,10 @@ function chooseMultiplier(
 
 
     /*
-       翻牌
+       翻牌。
+
+       加上 flipped 后，
+       CSS会自动停止这张卡牌的跳动。
     */
 
     card.classList.add(
@@ -2710,14 +2867,6 @@ function chooseMultiplier(
         total *
         selectedMultiplier;
 
-
-    /*
-       处理小数
-       例如 5 × 1.5 = 7.5
-
-       如果你以后希望全部必须
-       是整数，也可以改成 Math.floor。
-    */
 
     if(
         Number.isInteger(finalAmount)
@@ -2744,8 +2893,10 @@ function chooseMultiplier(
 
 
     /*
-       其他三张卡牌变暗，
-       表示已经选择完成。
+       其他三张卡牌：
+       停止跳动
+       变暗
+       禁止点击
     */
 
     const allCards =
@@ -2774,11 +2925,6 @@ function chooseMultiplier(
     helper.textContent =
         `🎴 幸运倍数 ${item.text}！`;
 
-
-    /*
-       翻牌后稍微停一下，
-       再进入最终结果。
-    */
 
     setTimeout(()=>{
 
@@ -2814,11 +2960,6 @@ function showResult(){
                 selectedMultiplier
         ).text;
 
-
-    /*
-       数据面板最终也显示
-       倍数后的钻石
-    */
 
     totalEl.textContent =
         finalAmount;

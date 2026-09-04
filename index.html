@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1191,23 +1190,24 @@ h1{
 
     user-select:none;
 
-    /*
-       新增：
-       每张卡牌的跳动参数由 JS
-       每一局随机生成
-    */
-
     animation:
         multiplierRandomJump
         var(--jump-duration,1.4s)
         ease-in-out
         var(--jump-delay,0s)
         infinite;
+
+    /*
+       让放大动画更加顺滑
+    */
+
+    transition:
+        transform .8s cubic-bezier(.17,.89,.32,1.25);
 }
 
 
 /* =========================
-   新增：卡牌随机跳动
+   卡牌随机跳动
 ========================= */
 
 @keyframes multiplierRandomJump{
@@ -1262,7 +1262,9 @@ h1{
 }
 
 
-/* 点击后停止随机跳动 */
+/* =========================
+   点击后的卡牌
+========================= */
 
 .multiplier-card.flipped{
 
@@ -1272,7 +1274,55 @@ h1{
 }
 
 
-/* 其他卡牌停止跳动 */
+/* =========================
+   抽中的卡牌
+   慢慢放大
+========================= */
+
+.multiplier-card.selected-card{
+
+    z-index:20;
+
+    animation:none !important;
+
+    transform:
+        scale(1.18);
+
+    transition:
+        transform
+        .8s
+        cubic-bezier(.17,.89,.32,1.25);
+}
+
+
+/*
+   抽中的卡牌翻开后
+   保持放大
+*/
+
+.multiplier-card.selected-card.flipped{
+
+    transform:
+        scale(1.18);
+}
+
+
+/*
+   抽中的卡牌增加发光
+*/
+
+.multiplier-card.selected-card
+.card-back{
+
+    box-shadow:
+        0 15px 35px rgba(180,50,100,.35),
+        0 0 25px rgba(255,150,190,.65);
+}
+
+
+/* =========================
+   其他卡牌
+========================= */
 
 .multiplier-card.disabled-card{
 
@@ -1427,18 +1477,6 @@ h1{
 }
 
 
-/* 选中后隐藏其他卡牌 */
-
-.multiplier-card.disabled-card{
-
-    opacity:.35;
-
-    pointer-events:none;
-
-    transform:scale(.94);
-}
-
-
 /* =========================
    最终结果弹窗
 ========================= */
@@ -1561,6 +1599,7 @@ h1{
     color:#b25177;
 
     font-size:14px;
+
     font-weight:800;
 }
 
@@ -1777,6 +1816,19 @@ h1{
 
     .multiplier-value{
         font-size:21px;
+    }
+
+    /*
+       手机上放大稍微小一点，
+       避免卡牌超出弹窗
+    */
+
+    .multiplier-card.selected-card,
+    .multiplier-card.selected-card.flipped{
+
+        transform:
+            scale(1.12);
+
     }
 }
 
@@ -2668,7 +2720,6 @@ function showMultiplierCards(){
     /*
        每一局重新随机排列。
 
-       所以：
        ×1
        ×1.5
        ×2
@@ -2697,16 +2748,8 @@ function showMultiplierCards(){
 
 
             /*
-               =====================================
-               新增：
-               每一张卡牌随机生成自己的跳动参数
-               =====================================
-            */
-
-
-            /*
-               跳动距离：
-               6 ~ 13 px
+               每张卡牌随机生成
+               自己的跳动参数
             */
 
             const jumpX =
@@ -2718,30 +2761,15 @@ function showMultiplierCards(){
                 Math.random() * 9;
 
 
-            /*
-               随机旋转：
-               2 ~ 5 度
-            */
-
             const jumpRotate =
                 2 +
                 Math.random() * 3;
 
 
-            /*
-               随机速度：
-               1.1 ~ 1.8 秒
-            */
-
             const jumpDuration =
                 1.1 +
                 Math.random() * .7;
 
-
-            /*
-               随机开始时间：
-               让4张卡不要同时跳
-            */
 
             const jumpDelay =
                 Math.random() * 1.2;
@@ -2774,9 +2802,7 @@ function showMultiplierCards(){
 
 
             /*
-               重要：
-               正面仍然完全隐藏倍率。
-               玩家看到的只有 🎀。
+               正面完全隐藏倍数
             */
 
             card.innerHTML = `
@@ -2828,31 +2854,38 @@ function showMultiplierCards(){
 }
 
 
-/* =========================
+/* ==================================================
    选择倍数
-========================= */
+================================================== */
 
 function chooseMultiplier(
     card,
     item
 ){
 
+    /*
+       防止重复点击
+    */
+
     if(
         card.classList.contains(
             "flipped"
+        ) ||
+        card.classList.contains(
+            "selected-card"
         )
     ) return;
 
 
     /*
-       翻牌。
-
-       加上 flipped 后，
-       CSS会自动停止这张卡牌的跳动。
+       =========================
+       第一阶段：
+       抽中的卡牌慢慢放大
+       =========================
     */
 
     card.classList.add(
-        "flipped"
+        "selected-card"
     );
 
 
@@ -2861,7 +2894,7 @@ function chooseMultiplier(
 
 
     /*
-       最终钻石
+       计算最终钻石
     */
 
     finalAmount =
@@ -2888,58 +2921,172 @@ function chooseMultiplier(
     }
 
 
+    /*
+       抽中音效
+    */
+
     multiplierSound();
 
     vibrate();
 
 
-    /*
-       其他三张卡牌：
-       停止跳动
-       变暗
-       禁止点击
-    */
-
-    const allCards =
-        multiplierCards.querySelectorAll(
-            ".multiplier-card"
-        );
-
-
-    allCards.forEach(
-        otherCard=>{
-
-            if(
-                otherCard !== card
-            ){
-
-                otherCard.classList.add(
-                    "disabled-card"
-                );
-
-            }
-
-        }
-    );
-
-
     helper.textContent =
-        `🎴 幸运倍数 ${item.text}！`;
+        "✨ 幸运卡牌正在揭晓……";
 
+
+    /*
+       =========================
+       第二阶段：
+       放大完成后翻开
+       =========================
+    */
 
     setTimeout(()=>{
 
-        multiplierOverlay.classList.remove(
-            "show"
+        card.classList.add(
+            "flipped"
         );
 
 
-        setTimeout(
-            showResult,
-            350
+        helper.textContent =
+            `🎴 你抽中了 ${item.text}！`;
+
+
+    },800);
+
+
+    /*
+       =========================
+       第三阶段：
+       停留一下
+       
+       然后其他3张依次翻开
+       =========================
+    */
+
+    setTimeout(()=>{
+
+
+        const allCards =
+            Array.from(
+                multiplierCards.querySelectorAll(
+                    ".multiplier-card"
+                )
+            );
+
+
+        const otherCards =
+            allCards.filter(
+                otherCard =>
+                    otherCard !== card
+            );
+
+
+        /*
+           其他3张卡
+           一张一张翻开
+
+           每张间隔 500ms
+        */
+
+        otherCards.forEach(
+            (otherCard,index)=>{
+
+                setTimeout(()=>{
+
+                    otherCard.classList.add(
+                        "flipped"
+                    );
+
+
+                    /*
+                       每次翻牌音效
+                    */
+
+                    playTone(
+                        650 + index * 120,
+                        .13,
+                        "sine",
+                        .045
+                    );
+
+
+                    vibrate();
+
+
+                }, index * 500);
+
+            }
         );
 
-    },1200);
+
+        /*
+           =========================
+           第四阶段：
+           等3张全部翻开
+           =========================
+        */
+
+        const revealTime =
+            otherCards.length * 500;
+
+
+        setTimeout(()=>{
+
+
+            /*
+               确保四张全部翻开
+            */
+
+            allCards.forEach(
+                otherCard=>{
+
+                    otherCard.classList.add(
+                        "flipped"
+                    );
+
+                }
+            );
+
+
+            helper.textContent =
+                `🎴 四张倍数全部揭晓！你抽中 ${item.text}！`;
+
+
+            /*
+               =========================
+               第五阶段：
+               四张全部显示后
+               停留1.5秒
+               =========================
+            */
+
+            setTimeout(()=>{
+
+
+                multiplierOverlay.classList.remove(
+                    "show"
+                );
+
+
+                /*
+                   弹窗关闭后
+                   再进入最终结果
+                */
+
+                setTimeout(
+                    showResult,
+                    350
+                );
+
+
+            },1500);
+
+
+        },revealTime);
+
+
+    },1800);
 
 }
 
@@ -3184,4 +3331,3 @@ document.addEventListener(
 
 </body>
 </html>
-```

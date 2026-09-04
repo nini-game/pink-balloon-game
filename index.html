@@ -2828,7 +2828,6 @@ function showMultiplierCards(){
 }
 
 
-```javascript
 /* =========================
    选择倍数
 ========================= */
@@ -2838,27 +2837,31 @@ function chooseMultiplier(
     item
 ){
 
-    /* 防止重复点击 */
     if(
-        card.classList.contains("flipped")
+        card.classList.contains(
+            "flipped"
+        )
     ) return;
 
 
     /*
-       =========================
-       第一阶段：
-       选中的卡牌立即翻开
-       =========================
+       翻牌。
+
+       加上 flipped 后，
+       CSS会自动停止这张卡牌的跳动。
     */
 
-    card.classList.add("flipped");
+    card.classList.add(
+        "flipped"
+    );
+
 
     selectedMultiplier =
         item.value;
 
 
     /*
-       计算最终钻石
+       最终钻石
     */
 
     finalAmount =
@@ -2890,150 +2893,295 @@ function chooseMultiplier(
     vibrate();
 
 
-    helper.textContent =
-        `🎴 你抽中了 ${item.text}！`;
-
-
     /*
-       =========================
-       第二阶段：
-       停留一下
-       
-       选中的卡牌翻开后，
-       停留 1000ms
-       =========================
+       其他三张卡牌：
+       停止跳动
+       变暗
+       禁止点击
     */
 
-    setTimeout(()=>{
-
-
-        const allCards =
-            Array.from(
-                multiplierCards.querySelectorAll(
-                    ".multiplier-card"
-                )
-            );
-
-
-        /*
-           找出另外3张卡
-        */
-
-        const otherCards =
-            allCards.filter(
-                otherCard =>
-                    otherCard !== card
-            );
-
-
-        /*
-           =========================
-           第三阶段：
-           其他3张依次翻开
-           
-           每张间隔 400ms
-           =========================
-        */
-
-        otherCards.forEach(
-            (otherCard,index)=>{
-
-                setTimeout(()=>{
-
-                    otherCard.classList.add(
-                        "flipped"
-                    );
-
-
-                    /*
-                       每张卡翻开时播放一点音效
-                    */
-
-                    playTone(
-                        650 + index * 100,
-                        .12,
-                        "sine",
-                        .045
-                    );
-
-
-                    vibrate();
-
-
-                }, index * 400);
-
-            }
+    const allCards =
+        multiplierCards.querySelectorAll(
+            ".multiplier-card"
         );
 
 
-        /*
-           =========================
-           第四阶段：
-           等最后一张卡翻开
-           
-           最后一张：
-           1000 + 800 = 1800ms
-           
-           再停留 1500ms
-           =========================
-        */
+    allCards.forEach(
+        otherCard=>{
 
-        setTimeout(()=>{
+            if(
+                otherCard !== card
+            ){
 
-
-            /*
-               确保4张卡全部翻开
-            */
-
-            allCards.forEach(
-                otherCard=>{
-
-                    otherCard.classList.add(
-                        "flipped"
-                    );
-
-                }
-            );
-
-
-            /*
-               =========================
-               第五阶段：
-               全部倍数显示后，
-               再进入最终结果
-               =========================
-            */
-
-            helper.textContent =
-                `🎴 四张幸运倍数全部揭晓！你抽中 ${item.text}！`;
-
-
-            setTimeout(()=>{
-
-
-                multiplierOverlay.classList.remove(
-                    "show"
+                otherCard.classList.add(
+                    "disabled-card"
                 );
 
+            }
 
-                /*
-                   弹窗关闭后，
-                   再稍微停顿一下
-                */
-
-                setTimeout(
-                    showResult,
-                    350
-                );
+        }
+    );
 
 
-            },1500);
+    helper.textContent =
+        `🎴 幸运倍数 ${item.text}！`;
 
 
-        },1800);
+    setTimeout(()=>{
+
+        multiplierOverlay.classList.remove(
+            "show"
+        );
 
 
-    },1000);
+        setTimeout(
+            showResult,
+            350
+        );
+
+    },1200);
 
 }
+
+
+/* =========================
+   最终结果
+========================= */
+
+function showResult(){
+
+    finalTotal.textContent =
+        finalAmount;
+
+
+    resultMultiplier.textContent =
+        multipliers.find(
+            item =>
+                item.value ===
+                selectedMultiplier
+        ).text;
+
+
+    totalEl.textContent =
+        finalAmount;
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+
+    victorySound();
+
+    vibrate();
+
+    createConfetti();
+
+}
+
+
+/* =========================
+   彩纸
+========================= */
+
+function createConfetti(){
+
+    for(
+        let i=0;
+        i<55;
+        i++
+    ){
+
+        const confetti =
+            document.createElement(
+                "div"
+            );
+
+        confetti.className =
+            "confetti";
+
+
+        confetti.style.left =
+            Math.random() *
+            100 +
+            "vw";
+
+
+        confetti.style.setProperty(
+            "--x",
+            (
+                Math.random()*200 -
+                100
+            ) + "px"
+        );
+
+
+        confetti.style.setProperty(
+            "--duration",
+            (
+                1.8 +
+                Math.random()*2
+            ) + "s"
+        );
+
+
+        confetti.style.background =
+            [
+                "#ff6f9f",
+                "#ff9fc5",
+                "#ffd36f",
+                "#fff",
+                "#d85bff"
+            ][
+                Math.floor(
+                    Math.random()*5
+                )
+            ];
+
+
+        confetti.style.transform =
+            `rotate(${Math.random()*360}deg)`;
+
+
+        document.body.appendChild(
+            confetti
+        );
+
+
+        setTimeout(
+            ()=>{
+                confetti.remove();
+            },
+            4500
+        );
+
+    }
+
+}
+
+
+/* =========================
+   再来一局
+========================= */
+
+function resetGame(){
+
+    selected = 0;
+
+    total = 0;
+
+    finalAmount = 0;
+
+    selectedMultiplier = 1;
+
+    gift.disabled = false;
+
+
+    overlay.classList.remove(
+        "show"
+    );
+
+
+    multiplierOverlay.classList.remove(
+        "show"
+    );
+
+
+    multiplierCards.innerHTML="";
+
+
+    makeBalloons();
+
+    update();
+
+}
+
+
+/* =========================
+   开奖按钮
+========================= */
+
+gift.addEventListener(
+    "click",
+    ()=>{
+
+        if(
+            selected === 10
+        ){
+
+            showMultiplierCards();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   再来一局
+========================= */
+
+again.addEventListener(
+    "click",
+    resetGame
+);
+
+
+/* =========================
+   声音
+========================= */
+
+soundButton.addEventListener(
+    "click",
+    ()=>{
+
+        soundOn =
+            !soundOn;
+
+        soundButton.textContent =
+            soundOn
+            ? "🔊"
+            : "🔇";
+
+
+        if(soundOn){
+
+            audioCtx();
+
+            playTone(
+                700,
+                .1
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   初始化
+========================= */
+
+makeBalloons();
+
+update();
+
+
+/* =========================
+   防止双击缩放
+========================= */
+
+document.addEventListener(
+    "dblclick",
+    e=>{
+        e.preventDefault();
+    },
+    {passive:false}
+);
+
+</script>
+
+</body>
+</html>
 ```

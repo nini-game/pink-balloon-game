@@ -1,5 +1,6 @@
 ```html
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -8,6 +9,7 @@
 <title>💗 幸运气球游戏</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
@@ -126,6 +128,7 @@ h1 {
 .multiplier-overlay {
   position: fixed;
   inset: 0;
+
   background: rgba(255, 90, 150, 0.35);
   backdrop-filter: blur(8px);
 
@@ -144,16 +147,22 @@ h1 {
 .multiplier-box {
   width: 92%;
   max-width: 600px;
+
   background: white;
+
   border-radius: 25px;
+
   padding: 25px 20px;
+
   text-align: center;
+
   box-shadow: 0 20px 60px rgba(0,0,0,0.2);
 
   animation: popup 0.35s ease;
 }
 
 @keyframes popup {
+
   from {
     transform: scale(0.7);
     opacity: 0;
@@ -163,6 +172,7 @@ h1 {
     transform: scale(1);
     opacity: 1;
   }
+
 }
 
 .multiplier-box h2 {
@@ -178,10 +188,15 @@ h1 {
 
 .current-total {
   margin: 15px auto 20px;
+
   background: #fff1f7;
+
   padding: 12px;
+
   border-radius: 15px;
+
   font-size: 19px;
+
   font-weight: bold;
 }
 
@@ -197,20 +212,26 @@ h1 {
 
 .cards {
   display: grid;
+
   grid-template-columns: repeat(4, 1fr);
+
   gap: 12px;
+
   perspective: 1000px;
 }
 
 .card {
   height: 145px;
+
   cursor: pointer;
+
   perspective: 1000px;
 }
 
 .card-inner {
   width: 100%;
   height: 100%;
+
   position: relative;
 
   transform-style: preserve-3d;
@@ -224,7 +245,9 @@ h1 {
 
 .card-front,
 .card-back {
+
   position: absolute;
+
   inset: 0;
 
   border-radius: 18px;
@@ -232,7 +255,9 @@ h1 {
   backface-visibility: hidden;
 
   display: flex;
+
   justify-content: center;
+
   align-items: center;
 
   font-weight: bold;
@@ -241,141 +266,240 @@ h1 {
 }
 
 
-/* 卡牌背面 */
+/* =========================
+   卡牌背面
+   未选择时只能看到这个
+========================= */
 
 .card-front {
-  background: linear-gradient(
-    145deg,
-    #ff6da8,
-    #ff3f87
-  );
+
+  background:
+    linear-gradient(
+      145deg,
+      #ff6da8,
+      #ff3f87
+    );
 
   color: white;
 
   font-size: 42px;
+
+  overflow: hidden;
+
 }
 
 
-/* 卡牌正面 */
+/* 卡牌装饰 */
+
+.card-front::before {
+
+  content: "♥";
+
+  position: absolute;
+
+  font-size: 90px;
+
+  opacity: 0.12;
+
+  transform: rotate(-15deg);
+
+}
+
+
+/* =========================
+   卡牌正面
+   只有选中后才显示
+========================= */
 
 .card-back {
+
   transform: rotateY(180deg);
 
-  background: linear-gradient(
-    145deg,
-    #fff,
-    #ffeaf3
-  );
+  background:
+    linear-gradient(
+      145deg,
+      #fff,
+      #ffeaf3
+    );
 
   color: #ff3f87;
 
   flex-direction: column;
 
   font-size: 27px;
+
 }
 
 .card-back small {
+
   margin-top: 5px;
+
   font-size: 13px;
+
   color: #999;
+
 }
 
 
-/* 已选卡 */
+/* 已选择卡 */
 
 .card.selected {
+
   transform: scale(1.05);
+
 }
 
+
+/* 其他卡牌 */
+
 .card.disabled {
+
   cursor: default;
+
   opacity: 0.55;
+
 }
 
 .card.disabled .card-inner {
+
   filter: grayscale(0.2);
+
 }
 
 
 /* 卡牌提示 */
 
 .card-tip {
+
   margin: 18px 0 0;
+
   font-size: 13px;
+
   color: #999;
+
 }
 
 
-/* 结果 */
+/* =========================
+   结果
+========================= */
 
 .result {
+
   display: none;
+
   margin-top: 20px;
+
   background: #fff0f6;
+
   border-radius: 18px;
+
   padding: 18px;
+
 }
 
 .result.show {
+
   display: block;
+
 }
 
 .result-title {
+
   font-size: 18px;
+
   color: #777;
+
 }
 
 .result-multiplier {
+
   font-size: 35px;
+
   font-weight: bold;
+
   color: #ff3f87;
+
   margin: 8px 0;
+
 }
 
 .result-total {
+
   font-size: 25px;
+
   font-weight: bold;
+
   color: #e83282;
+
 }
 
 .next-btn {
+
   margin-top: 15px;
+
   border: none;
+
   padding: 12px 30px;
+
   border-radius: 30px;
+
   background: #ff4f91;
+
   color: white;
+
   font-size: 17px;
+
   cursor: pointer;
+
+}
+
+.next-btn:hover {
+
+  background: #e83282;
+
 }
 
 
-/* 手机 */
+/* =========================
+   手机
+========================= */
 
 @media (max-width: 500px) {
 
   .balloons {
+
     grid-template-columns: repeat(5, 1fr);
+
     gap: 7px;
+
   }
 
   .balloon {
+
     height: 60px;
+
     font-size: 23px;
+
   }
 
   .cards {
+
     grid-template-columns: repeat(2, 1fr);
+
   }
 
   .card {
+
     height: 125px;
+
   }
 
 }
-</style>
-</head>
 
+</style>
+
+</head>
 
 <body>
 
@@ -384,78 +508,134 @@ h1 {
   <h1>🎈 幸运气球 🎈</h1>
 
   <div class="diamond-box">
-    当前钻石
-    <br>
-    <span id="diamond">30</span> 💎
+
+```
+当前钻石
+
+<br>
+
+<span id="diamond">30</span> 💎
+```
+
   </div>
 
   <div class="progress">
-    已打开：
-    <span id="openedCount">0</span> / 10
+
+```
+已打开：
+
+<span id="openedCount">0</span> / 10
+```
+
   </div>
 
   <div class="balloons" id="balloons"></div>
 
   <button class="reset-btn" onclick="resetGame()">
-    🔄 重新开始
+
+```
+🔄 重新开始
+```
+
   </button>
 
 </div>
-
 
 <!-- =========================
      倍率卡弹窗
 ========================= -->
 
-<div class="multiplier-overlay" id="multiplierOverlay">
+<div
+  class="multiplier-overlay"
+  id="multiplierOverlay"
+>
 
   <div class="multiplier-box">
 
-    <h2>💗 幸运倍率卡 💗</h2>
+```
+<h2>💗 幸运倍率卡 💗</h2>
 
-    <p class="multiplier-subtitle">
-      10 个气球全部打开啦！<br>
-      选择一张卡决定最终钻石。
-    </p>
 
-    <div class="current-total">
-      当前钻石：
-      <span id="currentTotal">0</span> 💎
-    </div>
+<p class="multiplier-subtitle">
 
-    <div class="cards" id="cards"></div>
+  10 个气球全部打开啦！<br>
 
-    <p class="card-tip">
-      每局卡牌位置都会随机 · 选中后才会翻开
-    </p>
+  选择一张卡决定最终钻石。
 
-    <div class="result" id="result">
+</p>
 
-      <div class="result-title">
-        本次幸运倍率
-      </div>
 
-      <div class="result-multiplier" id="resultMultiplier">
-        1.5×
-      </div>
+<div class="current-total">
 
-      <div class="result-total">
-        最终钻石：
-        <span id="resultTotal">0</span> 💎
-      </div>
+  当前钻石：
 
-      <button class="next-btn" onclick="nextRound()">
-        🎈 下一局
-      </button>
+  <span id="currentTotal">0</span> 💎
 
-    </div>
+</div>
+
+
+<div
+  class="cards"
+  id="cards"
+></div>
+
+
+<p class="card-tip">
+
+  每局卡牌位置都会随机<br>
+
+  <strong>选中后才会翻开</strong>
+
+</p>
+
+
+<div
+  class="result"
+  id="result"
+>
+
+  <div class="result-title">
+
+    本次幸运倍率
+
+  </div>
+
+
+  <div
+    class="result-multiplier"
+    id="resultMultiplier"
+  >
+    1 ×
+  </div>
+
+
+  <div class="result-total">
+
+    最终钻石：
+
+    <span id="resultTotal">0</span> 💎
+
+  </div>
+
+
+  <button
+    class="next-btn"
+    onclick="nextRound()"
+  >
+
+    🎈 下一局
+
+  </button>
+
+</div>
+```
 
   </div>
 
 </div>
 
-
 <script>
+
 
 /* =====================================================
    游戏设置
@@ -463,43 +643,43 @@ h1 {
 
 
 /*
-  初始钻石
+   每一局开始的钻石
 
-  你可以改这里：
-
-  5
-  10
-  20
-  30
-  50
-  100
-
+   想改成其他数字可以直接修改这里
 */
 
-let diamond = 30;
+const START_DIAMOND = 30;
+
 
 
 /*
-  倍率卡
+   倍率卡
 
-  1 = 1倍
-  1.5 = 1.5倍
-  2 = 2倍
-  0.5 = 除2
-
+   1 = 1倍
+   1.5 = 1.5倍
+   2 = 2倍
+   0.5 = 除2
 */
 
 const multipliers = [
+
   1,
+
   1.5,
+
   2,
+
   0.5
+
 ];
+
 
 
 /* =====================================================
    游戏变量
 ===================================================== */
+
+let diamond = START_DIAMOND;
 
 let openedCount = 0;
 
@@ -510,11 +690,21 @@ let gameFinished = false;
 let cardSelected = false;
 
 
+
 /* =====================================================
-   初始化
+   初始化游戏
 ===================================================== */
 
 function initGame() {
+
+
+  /*
+     每次开始新游戏
+     都重新设置为30钻石
+  */
+
+  diamond = START_DIAMOND;
+
 
   openedCount = 0;
 
@@ -524,19 +714,27 @@ function initGame() {
 
   currentTotal = 0;
 
-  document.getElementById("diamond").textContent = diamond;
 
-  document.getElementById("openedCount").textContent = "0";
+  document.getElementById("diamond")
+    .textContent = formatNumber(diamond);
+
+
+  document.getElementById("openedCount")
+    .textContent = "0";
+
 
   document.getElementById("multiplierOverlay")
     .classList.remove("show");
 
+
   document.getElementById("result")
     .classList.remove("show");
+
 
   createBalloons();
 
 }
+
 
 
 /* =====================================================
@@ -545,31 +743,46 @@ function initGame() {
 
 function createBalloons() {
 
+
   const container =
     document.getElementById("balloons");
 
+
   container.innerHTML = "";
 
-  for (let i = 0; i < 10; i++) {
+
+  for (
+    let i = 0;
+    i < 10;
+    i++
+  ) {
+
 
     const balloon =
       document.createElement("button");
 
+
     balloon.className = "balloon";
+
 
     balloon.textContent = "🎈";
 
+
     balloon.dataset.index = i;
+
 
     balloon.addEventListener(
       "click",
       openBalloon
     );
 
+
     container.appendChild(balloon);
+
   }
 
 }
+
 
 
 /* =====================================================
@@ -578,31 +791,47 @@ function createBalloons() {
 
 function openBalloon(event) {
 
+
   if (gameFinished) {
+
     return;
+
   }
 
-  const balloon = event.currentTarget;
 
-  if (balloon.classList.contains("opened")) {
+  const balloon =
+    event.currentTarget;
+
+
+  if (
+    balloon.classList.contains("opened")
+  ) {
+
     return;
+
   }
+
 
   balloon.classList.add("opened");
 
+
   balloon.textContent = "💥";
 
+
   openedCount++;
+
 
   document.getElementById("openedCount")
     .textContent = openedCount;
 
 
+
   /*
-    10个全部打开
+     10个全部打开
   */
 
   if (openedCount >= 10) {
+
 
     setTimeout(() => {
 
@@ -615,25 +844,37 @@ function openBalloon(event) {
 }
 
 
+
 /* =====================================================
    打开倍率卡
 ===================================================== */
 
 function openMultiplier() {
 
+
   gameFinished = true;
+
+
+  /*
+     保存本局开始时的钻石
+  */
 
   currentTotal = diamond;
 
+
   document.getElementById("currentTotal")
-    .textContent = currentTotal;
+    .textContent =
+      formatNumber(currentTotal);
+
 
   createCards();
+
 
   document.getElementById("multiplierOverlay")
     .classList.add("show");
 
 }
+
 
 
 /* =====================================================
@@ -642,58 +883,54 @@ function openMultiplier() {
 
 function createCards() {
 
+
   const container =
     document.getElementById("cards");
 
+
   container.innerHTML = "";
 
-  /*
-    复制一份倍率数组
 
-    防止修改原数组
+  /*
+     随机复制倍率
   */
 
   const shuffled =
     [...multipliers];
 
-  /*
-    随机打乱
-  */
 
   shuffle(shuffled);
 
 
-  shuffled.forEach((multiplier, index) => {
+
+  shuffled.forEach((multiplier) => {
+
 
     const card =
       document.createElement("div");
 
-    card.className = "card";
 
-    card.dataset.multiplier = multiplier;
+    card.className = "card";
 
 
     /*
-      卡牌结构
+       不再把倍率放进HTML里面。
+
+       倍率通过点击事件的闭包保存，
+       所以卡牌表面完全不会出现倍率。
     */
 
     card.innerHTML = `
 
       <div class="card-inner">
 
-        <!-- 背面 -->
-
         <div class="card-front">
           💗
         </div>
 
-        <!-- 正面 -->
-
         <div class="card-back">
 
-          <div>
-            ${formatMultiplier(multiplier)}
-          </div>
+          <div class="card-value"></div>
 
           <small>
             幸运倍率
@@ -706,9 +943,18 @@ function createCards() {
     `;
 
 
+    /*
+       把倍率绑定到点击事件，
+       而不是显示在卡牌HTML上。
+    */
+
     card.addEventListener(
       "click",
-      selectCard
+      function() {
+
+        selectCard(card, multiplier);
+
+      }
     );
 
 
@@ -719,31 +965,39 @@ function createCards() {
 }
 
 
+
 /* =====================================================
    点击卡牌
 ===================================================== */
 
-function selectCard(event) {
+function selectCard(card, multiplier) {
+
 
   if (cardSelected) {
+
     return;
+
   }
 
-  const card =
-    event.currentTarget;
 
   cardSelected = true;
 
+
   /*
-    获取倍率
+     显示倍率到被选择的卡牌
   */
 
-  const multiplier =
-    Number(card.dataset.multiplier);
+  const value =
+    card.querySelector(".card-value");
+
+
+  value.textContent =
+    formatMultiplier(multiplier);
+
 
 
   /*
-    翻牌
+     翻牌
   */
 
   card.classList.add("flipped");
@@ -751,14 +1005,17 @@ function selectCard(event) {
   card.classList.add("selected");
 
 
+
   /*
-    其他卡牌不能点击
+     其他卡牌禁止点击
   */
 
   const allCards =
     document.querySelectorAll(".card");
 
+
   allCards.forEach(other => {
+
 
     if (other !== card) {
 
@@ -769,8 +1026,9 @@ function selectCard(event) {
   });
 
 
+
   /*
-    等待翻牌动画完成
+     等待翻牌动画完成
   */
 
   setTimeout(() => {
@@ -782,25 +1040,31 @@ function selectCard(event) {
 }
 
 
+
 /* =====================================================
    计算最终钻石
 ===================================================== */
 
 function calculateResult(multiplier) {
 
+
   let finalDiamond;
 
 
+
   /*
-    0.5就是除2
+     0.5 = 除2
   */
 
   if (multiplier === 0.5) {
 
+
     finalDiamond =
       currentTotal / 2;
 
+
   } else {
+
 
     finalDiamond =
       currentTotal * multiplier;
@@ -808,35 +1072,45 @@ function calculateResult(multiplier) {
   }
 
 
+
   /*
-    保留最多2位小数
+     最多保留2位小数
   */
 
   finalDiamond =
-    Math.round(finalDiamond * 100) / 100;
+    Math.round(
+      finalDiamond * 100
+    ) / 100;
+
 
 
   /*
-    防止出现负数
+     防止负数
   */
 
   if (finalDiamond < 0) {
+
     finalDiamond = 0;
+
   }
 
 
+
   /*
-    更新钻石
+     更新本局钻石
   */
 
   diamond = finalDiamond;
 
+
   document.getElementById("diamond")
-    .textContent = formatNumber(finalDiamond);
+    .textContent =
+      formatNumber(finalDiamond);
+
 
 
   /*
-    显示结果
+     显示倍率
   */
 
   document.getElementById("resultMultiplier")
@@ -844,15 +1118,26 @@ function calculateResult(multiplier) {
       formatMultiplier(multiplier);
 
 
+
+  /*
+     显示最终钻石
+  */
+
   document.getElementById("resultTotal")
     .textContent =
       formatNumber(finalDiamond);
 
 
+
+  /*
+     显示结果
+  */
+
   document.getElementById("result")
     .classList.add("show");
 
 }
+
 
 
 /* =====================================================
@@ -861,9 +1146,22 @@ function calculateResult(multiplier) {
 
 function nextRound() {
 
+
+  /*
+     重点：
+
+     上一局钻石在这里彻底结束。
+
+     下一局重新从30钻石开始。
+  */
+
+  diamond = START_DIAMOND;
+
+
   initGame();
 
 }
+
 
 
 /* =====================================================
@@ -872,25 +1170,26 @@ function nextRound() {
 
 function resetGame() {
 
-  /*
-    恢复初始钻石
 
-    如果你不想恢复30，
-    可以删除下面这行
+  /*
+     重新开始也恢复30钻石
   */
 
-  diamond = 30;
+  diamond = START_DIAMOND;
+
 
   initGame();
 
 }
 
 
+
 /* =====================================================
-   随机打乱数组
+   随机打乱
 ===================================================== */
 
 function shuffle(array) {
+
 
   for (
     let i = array.length - 1;
@@ -898,8 +1197,12 @@ function shuffle(array) {
     i--
   ) {
 
+
     const j =
-      Math.floor(Math.random() * (i + 1));
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
 
     [
       array[i],
@@ -915,11 +1218,13 @@ function shuffle(array) {
 }
 
 
+
 /* =====================================================
    倍率显示
 ===================================================== */
 
 function formatMultiplier(multiplier) {
+
 
   if (multiplier === 0.5) {
 
@@ -927,11 +1232,13 @@ function formatMultiplier(multiplier) {
 
   }
 
+
   if (multiplier === 1.5) {
 
     return "1.5 ×";
 
   }
+
 
   if (multiplier === 2) {
 
@@ -939,9 +1246,11 @@ function formatMultiplier(multiplier) {
 
   }
 
+
   return "1 ×";
 
 }
+
 
 
 /* =====================================================
@@ -950,19 +1259,24 @@ function formatMultiplier(multiplier) {
 
 function formatNumber(number) {
 
+
   return Number(number)
     .toLocaleString("en-US", {
+
       maximumFractionDigits: 2
+
     });
 
 }
 
 
+
 /* =====================================================
-   启动游戏
+   启动
 ===================================================== */
 
 initGame();
+
 
 </script>
 

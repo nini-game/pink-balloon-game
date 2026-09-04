@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -17,10 +18,6 @@
 <title>幸运气球派对</title>
 
 <style>
-
-/* =========================
-   基础
-========================= */
 
 *{
     box-sizing:border-box;
@@ -75,11 +72,6 @@ body::before{
     opacity:.9;
 }
 
-
-/* =========================
-   主容器
-========================= */
-
 .app{
     width:100%;
     max-width:980px;
@@ -95,11 +87,6 @@ body::before{
 
     position:relative;
 }
-
-
-/* =========================
-   两侧幕布
-========================= */
 
 .curtain{
     position:fixed;
@@ -136,11 +123,6 @@ body::before{
     transform:scaleX(-1);
     border-radius:0 0 40px 0;
 }
-
-
-/* =========================
-   顶部灯光
-========================= */
 
 .lights{
     position:absolute;
@@ -183,11 +165,6 @@ body::before{
     to{opacity:1;transform:scale(1.25)}
 }
 
-
-/* =========================
-   音效按钮
-========================= */
-
 .sound{
     position:absolute;
     top:48px;
@@ -215,17 +192,10 @@ body::before{
     transform:scale(.9);
 }
 
-
-/* =========================
-   Hero
-========================= */
-
 .hero{
     position:relative;
     z-index:2;
-
     text-align:center;
-
     padding-top:32px;
 }
 
@@ -304,11 +274,6 @@ h1{
     text-shadow:
         0 2px 4px rgba(130,50,80,.18);
 }
-
-
-/* =========================
-   数据面板
-========================= */
 
 .stage{
     position:relative;
@@ -423,11 +388,6 @@ h1{
     color:#ba6388;
 }
 
-
-/* =========================
-   气球区域
-========================= */
-
 .balloon-board{
     position:relative;
     z-index:3;
@@ -460,7 +420,6 @@ h1{
 
 .board-title{
     text-align:center;
-
     margin-bottom:8px;
 }
 
@@ -481,11 +440,6 @@ h1{
     box-shadow:
         0 4px 10px rgba(170,60,100,.08);
 }
-
-
-/* =========================
-   16个气球
-========================= */
 
 .balloons{
     display:grid;
@@ -529,7 +483,6 @@ h1{
 }
 
 .balloon-body{
-
     position:relative;
 
     width:
@@ -745,14 +698,12 @@ h1{
 
 .bow::before{
     left:0;
-
     border-radius:
         90% 15% 70% 30%;
 }
 
 .bow::after{
     right:0;
-
     border-radius:
         15% 90% 30% 70%;
 }
@@ -802,7 +753,6 @@ h1{
 }
 
 .reward{
-
     position:absolute;
 
     left:50%;
@@ -846,7 +796,6 @@ h1{
 }
 
 .balloon.revealed .reward{
-
     opacity:1;
 
     transform:
@@ -858,7 +807,6 @@ h1{
 }
 
 .balloon.pop .balloon-body{
-
     animation:
         balloonPop .42s forwards;
 }
@@ -866,7 +814,6 @@ h1{
 .balloon.pop .knot,
 .balloon.pop .bow,
 .balloon.pop .string{
-
     animation:
         fadeAway .28s forwards;
 }
@@ -890,16 +837,10 @@ h1{
 }
 
 @keyframes fadeAway{
-
     to{
         opacity:0;
     }
 }
-
-
-/* =========================
-   闪光粒子
-========================= */
 
 .spark{
     position:fixed;
@@ -944,11 +885,6 @@ h1{
     }
 }
 
-
-/* =========================
-   下方提示
-========================= */
-
 .note{
     position:relative;
     z-index:3;
@@ -965,11 +901,6 @@ h1{
     text-shadow:
         0 2px 4px rgba(120,40,75,.18);
 }
-
-
-/* =========================
-   开奖按钮
-========================= */
 
 .gift{
     position:relative;
@@ -1018,11 +949,6 @@ h1{
 .gift:disabled{
     opacity:.55;
 }
-
-
-/* =========================
-   Footer
-========================= */
 
 .footer{
     position:relative;
@@ -1162,25 +1088,34 @@ h1{
 }
 
 
-/* =========================
-   4张隐藏卡牌
-========================= */
+/* ==================================================
+   7张卡牌
+================================================== */
 
 .multiplier-cards{
 
     display:grid;
 
     grid-template-columns:
-        repeat(4,1fr);
+        repeat(7, minmax(0,1fr));
 
-    gap:10px;
+    gap:8px;
 
     width:100%;
+
+    align-items:center;
 }
+
+
+/*
+   所有卡牌固定完全相同尺寸
+*/
 
 .multiplier-card{
 
     height:145px;
+
+    min-width:0;
 
     position:relative;
 
@@ -1197,18 +1132,71 @@ h1{
         var(--jump-delay,0s)
         infinite;
 
-    /*
-       让放大动画更加顺滑
-    */
-
     transition:
-        transform .8s cubic-bezier(.17,.89,.32,1.25);
+        filter .35s ease,
+        box-shadow .35s ease;
 }
 
 
-/* =========================
-   卡牌随机跳动
-========================= */
+/*
+   卡牌翻开后停止跳动
+*/
+
+.multiplier-card.flipped{
+
+    cursor:default;
+
+    animation:none !important;
+}
+
+
+/*
+   抽中的卡牌：
+   不改变大小，只增加发光
+*/
+
+.multiplier-card.selected-card{
+
+    z-index:20;
+
+    animation:none !important;
+
+    filter:
+        drop-shadow(0 0 12px rgba(255,105,165,.8))
+        drop-shadow(0 0 24px rgba(255,170,205,.65));
+
+    transition:
+        filter .5s ease;
+}
+
+
+/*
+   抽中的卡牌最后翻开
+*/
+
+.multiplier-card.selected-card.flipped{
+
+    filter:
+        drop-shadow(0 0 15px rgba(255,105,165,.95))
+        drop-shadow(0 0 30px rgba(255,170,205,.8));
+}
+
+
+/*
+   其他已经翻开的卡牌
+*/
+
+.multiplier-card.revealed-other{
+
+    animation:none !important;
+
+    filter:none;
+
+    cursor:default;
+}
+
+
+/* 卡牌随机跳动 */
 
 @keyframes multiplierRandomJump{
 
@@ -1262,80 +1250,6 @@ h1{
 }
 
 
-/* =========================
-   点击后的卡牌
-========================= */
-
-.multiplier-card.flipped{
-
-    cursor:default;
-
-    animation:none !important;
-}
-
-
-/* =========================
-   抽中的卡牌
-   慢慢放大
-========================= */
-
-.multiplier-card.selected-card{
-
-    z-index:20;
-
-    animation:none !important;
-
-    transform:
-        scale(1.18);
-
-    transition:
-        transform
-        .8s
-        cubic-bezier(.17,.89,.32,1.25);
-}
-
-
-/*
-   抽中的卡牌翻开后
-   保持放大
-*/
-
-.multiplier-card.selected-card.flipped{
-
-    transform:
-        scale(1.18);
-}
-
-
-/*
-   抽中的卡牌增加发光
-*/
-
-.multiplier-card.selected-card
-.card-back{
-
-    box-shadow:
-        0 15px 35px rgba(180,50,100,.35),
-        0 0 25px rgba(255,150,190,.65);
-}
-
-
-/* =========================
-   其他卡牌
-========================= */
-
-.multiplier-card.disabled-card{
-
-    opacity:.35;
-
-    pointer-events:none;
-
-    transform:scale(.94);
-
-    animation:none !important;
-}
-
-
 .card-inner{
 
     position:relative;
@@ -1377,7 +1291,7 @@ h1{
 }
 
 
-/* 卡牌背面：隐藏内容 */
+/* 卡牌背面：完全隐藏内容 */
 
 .card-front{
 
@@ -1453,33 +1367,56 @@ h1{
 
     text-shadow:
         0 2px 3px rgba(180,50,90,.12);
+
+    white-space:nowrap;
 }
 
 
-/* 点击动画 */
+/*
+   清空卡牌样式
+*/
 
-.multiplier-card:not(.flipped):hover{
+.multiplier-card.clear-card .multiplier-value{
+
+    color:#d83f78;
+
+    font-size:21px;
+
+    white-space:nowrap;
+}
+
+
+/*
+   ×1卡牌正常显示
+*/
+
+.multiplier-card.x1-card .multiplier-value{
+
+    color:#e24e87;
+}
+
+
+/*
+   鼠标悬停
+*/
+
+.multiplier-card:not(.flipped):not(.selected-card):hover{
 
     transform:
         translateY(-6px)
         rotate(-1deg);
 }
 
-.multiplier-card:not(.flipped):active{
+.multiplier-card:not(.flipped):not(.selected-card):active{
 
     transform:
         scale(.94);
 }
 
-.multiplier-card.flipped{
 
-    cursor:default;
-}
-
-
-/* =========================
+/* ==================================================
    最终结果弹窗
-========================= */
+================================================== */
 
 .overlay{
 
@@ -1670,16 +1607,12 @@ h1{
 }
 
 .again:active{
+
     transform:translateY(4px);
 
     box-shadow:
         0 1px 0 #c63b72;
 }
-
-
-/* =========================
-   彩纸
-========================= */
 
 .confetti{
 
@@ -1704,6 +1637,7 @@ h1{
 @keyframes confettiFall{
 
     to{
+
         transform:
             translate3d(
                 var(--x),
@@ -1716,11 +1650,65 @@ h1{
 
         opacity:.8;
     }
+
 }
 
 
 /* =========================
-   小屏
+   手机适配
+========================= */
+
+@media(max-width:600px){
+
+    .multiplier-box{
+        width:min(560px,96vw);
+        padding:21px 8px 18px;
+    }
+
+    .multiplier-title{
+        font-size:22px;
+    }
+
+    .multiplier-subtitle{
+        font-size:11px;
+    }
+
+    .multiplier-cards{
+        gap:4px;
+    }
+
+    .multiplier-card{
+        height:115px;
+    }
+
+    .card-front,
+    .card-back{
+        border-radius:14px;
+        border-width:2px;
+    }
+
+    .card-front::before{
+        inset:5px;
+        border-radius:10px;
+    }
+
+    .card-front::after{
+        font-size:24px;
+    }
+
+    .multiplier-value{
+        font-size:15px;
+    }
+
+    .multiplier-card.clear-card .multiplier-value{
+        font-size:12px;
+    }
+
+}
+
+
+/* =========================
+   超小屏
 ========================= */
 
 @media(max-width:390px){
@@ -1785,56 +1773,32 @@ h1{
         font-size:14px;
     }
 
-    .multiplier-box{
-        padding:21px 10px 18px;
-    }
-
-    .multiplier-title{
-        font-size:22px;
-    }
-
-    .multiplier-subtitle{
-        font-size:11px;
-    }
-
-    .multiplier-cards{
-        gap:6px;
-    }
-
     .multiplier-card{
-        height:120px;
+        height:105px;
     }
 
     .card-front,
     .card-back{
-        border-radius:16px;
+        border-radius:12px;
     }
 
     .card-front::after{
-        font-size:28px;
-    }
-
-    .multiplier-value{
         font-size:21px;
     }
 
-    /*
-       手机上放大稍微小一点，
-       避免卡牌超出弹窗
-    */
-
-    .multiplier-card.selected-card,
-    .multiplier-card.selected-card.flipped{
-
-        transform:
-            scale(1.12);
-
+    .multiplier-value{
+        font-size:13px;
     }
+
+    .multiplier-card.clear-card .multiplier-value{
+        font-size:10px;
+    }
+
 }
 
 
 /* =========================
-   更大的手机
+   更大的手机 / 平板
 ========================= */
 
 @media(min-width:600px){
@@ -1859,6 +1823,7 @@ h1{
     .string{
         top:172px;
     }
+
 }
 
 </style>
@@ -1999,7 +1964,8 @@ h1{
             🎴 最后的幸运倍数
         </div>
 
-        <div class="multiplier-subtitle">
+        <div class="multiplier-subtitle"
+             id="multiplierSubtitle">
             选择一张隐藏卡牌，看看你的最终倍数！
         </div>
 
@@ -2010,9 +1976,6 @@ h1{
         <div
             class="multiplier-cards"
             id="multiplierCards">
-
-            <!-- JS自动生成 -->
-
         </div>
 
     </div>
@@ -2096,26 +2059,57 @@ const rewards = [
 
 
 /*
-   倍数卡牌
+   最终7张卡牌
+
+   4张原本倍数卡
+   + 1张额外 ×1
+   + 2张清空
 */
 
 const multipliers = [
+
     {
         value:1,
-        text:"×1"
+        text:"×1",
+        type:"multiplier"
     },
+
     {
         value:1.5,
-        text:"×1.5"
+        text:"×1.5",
+        type:"multiplier"
     },
+
     {
         value:2,
-        text:"×2"
+        text:"×2",
+        type:"multiplier"
     },
+
     {
-        value:0.5,
-        text:"÷2"
+        value:.5,
+        text:"÷2",
+        type:"multiplier"
+    },
+
+    {
+        value:1,
+        text:"×1",
+        type:"multiplier"
+    },
+
+    {
+        value:0,
+        text:"清空",
+        type:"clear"
+    },
+
+    {
+        value:0,
+        text:"清空",
+        type:"clear"
     }
+
 ];
 
 
@@ -2126,6 +2120,8 @@ let total = 0;
 let finalAmount = 0;
 
 let selectedMultiplier = 1;
+
+let selectedCardItem = null;
 
 let soundOn = true;
 
@@ -2184,6 +2180,11 @@ const baseReward =
 const resultMultiplier =
     document.getElementById(
         "resultMultiplier"
+    );
+
+const multiplierSubtitle =
+    document.getElementById(
+        "multiplierSubtitle"
     );
 
 
@@ -2718,14 +2719,15 @@ function showMultiplierCards(){
 
 
     /*
-       每一局重新随机排列。
+       每局重新随机排列7张卡牌
 
        ×1
        ×1.5
        ×2
        ÷2
-
-       每次出现的位置都会不同。
+       ×1
+       清空
+       清空
     */
 
     const shuffled =
@@ -2743,33 +2745,51 @@ function showMultiplierCards(){
                     "div"
                 );
 
+
             card.className =
                 "multiplier-card";
 
 
             /*
-               每张卡牌随机生成
-               自己的跳动参数
+               特殊卡牌增加 class
+            */
+
+            if(
+                item.type === "clear"
+            ){
+
+                card.classList.add(
+                    "clear-card"
+                );
+
+            }else{
+
+                card.classList.add(
+                    "x1-card"
+                );
+
+            }
+
+
+            /*
+               每张卡牌随机跳动参数
             */
 
             const jumpX =
-                4 +
-                Math.random() * 8;
+                3 +
+                Math.random() * 6;
 
             const jumpY =
-                6 +
-                Math.random() * 9;
-
+                4 +
+                Math.random() * 7;
 
             const jumpRotate =
-                2 +
-                Math.random() * 3;
-
+                1.5 +
+                Math.random() * 2.5;
 
             const jumpDuration =
                 1.1 +
                 Math.random() * .7;
-
 
             const jumpDelay =
                 Math.random() * 1.2;
@@ -2802,7 +2822,7 @@ function showMultiplierCards(){
 
 
             /*
-               正面完全隐藏倍数
+               卡牌正面完全隐藏
             */
 
             card.innerHTML = `
@@ -2849,7 +2869,46 @@ function showMultiplierCards(){
     );
 
 
+    multiplierSubtitle.textContent =
+        "选择一张隐藏卡牌，看看你的最终倍数！";
+
+
     vibrate();
+
+}
+
+
+/* ==================================================
+   最终金额计算
+================================================== */
+
+function calculateFinalAmount(item){
+
+    if(
+        item.type === "clear"
+    ){
+
+        return 0;
+
+    }
+
+
+    let amount =
+        total * item.value;
+
+
+    if(
+        Number.isInteger(amount)
+    ){
+
+        return Math.round(amount);
+
+    }
+
+
+    return Math.round(
+        amount * 10
+    ) / 10;
 
 }
 
@@ -2868,19 +2927,41 @@ function chooseMultiplier(
     */
 
     if(
-        card.classList.contains(
-            "flipped"
-        ) ||
-        card.classList.contains(
-            "selected-card"
-        )
+        card.classList.contains("flipped")
+    ) return;
+
+
+    if(
+        selectedCardItem
     ) return;
 
 
     /*
+       记录抽中的卡
+    */
+
+    selectedCardItem =
+        item;
+
+
+    selectedMultiplier =
+        item.value;
+
+
+    finalAmount =
+        calculateFinalAmount(
+            item
+        );
+
+
+    /*
        =========================
-       第一阶段：
-       抽中的卡牌慢慢放大
+       第一阶段
+       
+       抽中的卡：
+       只增加发光
+       不翻开
+       不改变大小
        =========================
     */
 
@@ -2889,83 +2970,39 @@ function chooseMultiplier(
     );
 
 
-    selectedMultiplier =
-        item.value;
-
-
-    /*
-       计算最终钻石
-    */
-
-    finalAmount =
-        total *
-        selectedMultiplier;
-
-
-    if(
-        Number.isInteger(finalAmount)
-    ){
-
-        finalAmount =
-            Math.round(
-                finalAmount
-            );
-
-    }else{
-
-        finalAmount =
-            Math.round(
-                finalAmount * 10
-            ) / 10;
-
-    }
-
-
-    /*
-       抽中音效
-    */
-
     multiplierSound();
 
     vibrate();
 
 
-    helper.textContent =
-        "✨ 幸运卡牌正在揭晓……";
-
-
-    /*
-       =========================
-       第二阶段：
-       放大完成后翻开
-       =========================
-    */
-
-    setTimeout(()=>{
-
-        card.classList.add(
-            "flipped"
-        );
-
+    if(
+        item.type === "clear"
+    ){
 
         helper.textContent =
-            `🎴 你抽中了 ${item.text}！`;
+            "✨ 幸运卡牌已经抽中，正在揭晓其他卡牌……";
 
+    }else{
 
-    },800);
+        helper.textContent =
+            "✨ 幸运卡牌已经抽中，正在揭晓其他卡牌……";
+
+    }
 
 
     /*
-       =========================
-       第三阶段：
-       停留一下
-       
-       然后其他3张依次翻开
-       =========================
+       给抽中的卡留一点悬念时间
     */
 
     setTimeout(()=>{
 
+        /*
+           =========================
+           第二阶段
+           
+           先翻开其他6张
+           =========================
+        */
 
         const allCards =
             Array.from(
@@ -2982,29 +3019,23 @@ function chooseMultiplier(
             );
 
 
-        /*
-           其他3张卡
-           一张一张翻开
-
-           每张间隔 500ms
-        */
-
         otherCards.forEach(
             (otherCard,index)=>{
 
                 setTimeout(()=>{
 
                     otherCard.classList.add(
-                        "flipped"
+                        "flipped",
+                        "revealed-other"
                     );
 
 
                     /*
-                       每次翻牌音效
+                       翻牌音效
                     */
 
                     playTone(
-                        650 + index * 120,
+                        650 + index * 80,
                         .13,
                         "sine",
                         .045
@@ -3021,72 +3052,113 @@ function chooseMultiplier(
 
 
         /*
-           =========================
-           第四阶段：
-           等3张全部翻开
-           =========================
+           6张卡全部翻开的时间
         */
 
         const revealTime =
             otherCards.length * 500;
 
 
+        /*
+           =========================
+           第三阶段
+           
+           其他6张全部展示完
+           =========================
+        */
+
         setTimeout(()=>{
 
-
-            /*
-               确保四张全部翻开
-            */
-
-            allCards.forEach(
-                otherCard=>{
-
-                    otherCard.classList.add(
-                        "flipped"
-                    );
-
-                }
-            );
-
-
             helper.textContent =
-                `🎴 四张倍数全部揭晓！你抽中 ${item.text}！`;
+                "🎴 其他幸运卡牌已经全部揭晓！";
 
 
             /*
-               =========================
-               第五阶段：
-               四张全部显示后
-               停留1.5秒
-               =========================
+               停留一下
             */
 
             setTimeout(()=>{
 
 
-                multiplierOverlay.classList.remove(
-                    "show"
+                /*
+                   =========================
+                   第四阶段
+                   
+                   最后才打开抽中的卡
+                   =========================
+                */
+
+                card.classList.add(
+                    "flipped"
                 );
+
+
+                if(
+                    item.type === "clear"
+                ){
+
+                    multiplierSubtitle.textContent =
+                        "💥 最后的结果是：清空！";
+
+                    helper.textContent =
+                        "💥 你抽中了「清空」！最终钻石归零！";
+
+                }else{
+
+                    multiplierSubtitle.textContent =
+                        `🎉 最终幸运卡：${item.text}`;
+
+                    helper.textContent =
+                        `🎴 最后揭晓！你抽中了 ${item.text}！`;
+
+                }
 
 
                 /*
-                   弹窗关闭后
-                   再进入最终结果
+                   最终卡牌音效
                 */
 
-                setTimeout(
-                    showResult,
-                    350
-                );
+                setTimeout(()=>{
+
+                    multiplierSound();
+
+                    vibrate();
+
+                },250);
 
 
-            },1500);
+                /*
+                   最后停留
+                */
+
+                setTimeout(()=>{
+
+                    multiplierOverlay.classList.remove(
+                        "show"
+                    );
+
+
+                    /*
+                       弹窗关闭后
+                       进入最终结果
+                    */
+
+                    setTimeout(
+                        showResult,
+                        400
+                    );
+
+
+                },1800);
+
+
+            },900);
 
 
         },revealTime);
 
 
-    },1800);
+    },650);
 
 }
 
@@ -3101,12 +3173,22 @@ function showResult(){
         finalAmount;
 
 
-    resultMultiplier.textContent =
-        multipliers.find(
-            item =>
-                item.value ===
-                selectedMultiplier
-        ).text;
+    if(
+        selectedCardItem &&
+        selectedCardItem.type === "clear"
+    ){
+
+        resultMultiplier.textContent =
+            "清空";
+
+    }else{
+
+        resultMultiplier.textContent =
+            selectedCardItem
+            ? selectedCardItem.text
+            : "×1";
+
+    }
 
 
     totalEl.textContent =
@@ -3221,6 +3303,8 @@ function resetGame(){
 
     selectedMultiplier = 1;
 
+    selectedCardItem = null;
+
     gift.disabled = false;
 
 
@@ -3235,6 +3319,10 @@ function resetGame(){
 
 
     multiplierCards.innerHTML="";
+
+
+    multiplierSubtitle.textContent =
+        "选择一张隐藏卡牌，看看你的最终倍数！";
 
 
     makeBalloons();
@@ -3331,3 +3419,4 @@ document.addEventListener(
 
 </body>
 </html>
+```
